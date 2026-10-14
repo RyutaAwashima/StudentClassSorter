@@ -55,9 +55,10 @@
     .maker-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
     .maker-section-heading h3 { margin: 0; font-size: 14px; }
     .maker-section-heading p { margin: 0; color: var(--muted); font-size: 10px; }
-    .maker-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 7px; }
-    .maker-student { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 9px; min-height: 44px; border: 1px solid #e4e5dc; border-radius: 8px; padding: 4px 8px; background: #fffefa; }
+    .maker-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 7px; }
+    .maker-student { display: grid; grid-template-columns: minmax(0, 1fr) minmax(68px, .65fr) minmax(78px, .75fr) auto; align-items: center; gap: 6px; min-height: 44px; border: 1px solid #e4e5dc; border-radius: 8px; padding: 4px 8px; background: #fffefa; }
     .maker-student input[type="text"] { min-height: 32px; padding: 0 7px; font-size: 11px; }
+    .maker-profile-select { min-width: 0; min-height: 32px; border: 1px solid var(--line); border-radius: 7px; padding: 0 4px; color: var(--ink); background: #fff; font: inherit; font-size: 10px; }
     .leader-toggle { display: inline-flex; align-items: center; gap: 4px; color: #986a2e; white-space: nowrap; font-size: 10px; font-weight: 800; }
     .leader-toggle input { accent-color: #ba8437; }
     .maker-rules { display: grid; gap: 7px; }
@@ -73,7 +74,7 @@
     [hidden] { display: none !important; }
     .workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
     .room-panel, .mission-panel, .roster-panel { border: 1px solid #e1e0d5; border-radius: 14px; background: rgb(255 254 249 / 94%); box-shadow: var(--shadow); }
-    .room-panel { position: sticky; top: 12px; min-width: 0; padding: 20px; }
+    .room-panel { position: static; min-width: 0; padding: 20px; }
     .control-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .room-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 13px; }
     .eyebrow { margin: 0 0 5px; color: var(--green); font-size: 11px; font-weight: 900; }
@@ -98,6 +99,7 @@
     .seat-person { display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 0; }
     .seat-face { flex: none; font-size: 17px; line-height: 1; }
     .seat-name { display: block; overflow: hidden; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .seat-traits { display: flex; justify-content: center; gap: 5px; margin-top: 4px; color: #657673; font-size: 9px; line-height: 1.2; white-space: nowrap; }
     .seat-caption { display: block; margin-top: 4px; color: #82918b; font-size: 9px; }
     .seat.leader .seat-name::after { content: " ★"; color: #d28a36; }
     .room-footnote { margin: 13px 1px 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
@@ -130,12 +132,15 @@
     .roster-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 11px; }
     .roster-heading p { margin: 0; color: var(--muted); font-size: 10px; }
     .roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 7px; }
-    .student { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-height: 40px; border: 1px solid #e0e4d9; border-radius: 8px; padding: 0 8px; color: #40524e; background: #fff; cursor: grab; font-size: 11px; font-weight: 700; transition: background .14s, border .14s; }
+    .student { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-height: 48px; border: 1px solid #e0e4d9; border-radius: 8px; padding: 4px 8px; color: #40524e; background: #fff; cursor: grab; font-size: 11px; font-weight: 700; transition: background .14s, border .14s; }
     .student:hover { border-color: #91b4a0; background: #f1f7ef; }
     .student.selected { border: 2px solid #d28a36; padding: 0 7px; background: #fff6dc; }
     .student:active { cursor: grabbing; }
     .student-face { flex: none; font-size: 17px; line-height: 1; }
     .student-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .student-copy { display: grid; min-width: 0; gap: 2px; }
+    .student-primary { display: flex; align-items: center; gap: 4px; min-width: 0; }
+    .student-traits { overflow: hidden; color: #657673; font-size: 9px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
     .student .leader-mark { color: #d28a36; font-size: 10px; }
     .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; color: var(--muted); font-size: 10px; }
     .legend span { display: inline-flex; align-items: center; gap: 4px; }
@@ -174,7 +179,10 @@
       .maker-view { padding: 14px; }
       .maker-fields { grid-template-columns: 1fr 1fr; }
       .maker-field:first-child { grid-column: 1 / -1; }
-      .maker-roster { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .maker-roster { grid-template-columns: 1fr; }
+      .maker-student { grid-template-columns: minmax(0, 1fr) minmax(110px, .8fr); }
+      .maker-student input[type="text"] { grid-column: 1 / -1; }
+      .leader-toggle { grid-column: 1 / -1; }
       .maker-rule-row { grid-template-columns: minmax(110px, 1fr) minmax(95px, 1fr) minmax(95px, 1fr) 36px; gap: 5px; }
       .maker-add-rule { grid-template-columns: 1fr 1fr; }
       .maker-add-rule .primary-button { min-height: 38px; }
@@ -191,7 +199,7 @@
       .mission-actions { margin-top: 10px; }
       .roster-panel { margin-top: 0; }
       .roster { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
-      .student { min-height: 34px; font-size: 10px; }
+      .student { min-height: 46px; font-size: 10px; }
       .pods { gap: 8px; }
       .pod { padding: 6px; }
       .pod-title { font-size: 10px; }
@@ -245,15 +253,15 @@
           <label class="maker-field">班の数<select id="makerTeamCount"><option value="2">2班</option><option value="3">3班</option><option value="4">4班</option><option value="5">5班</option><option value="6">6班</option><option value="7">7班</option></select></label>
         </div>
         <section class="maker-section" aria-labelledby="makerRosterTitle">
-          <div class="maker-section-heading"><h3 id="makerRosterTitle">生徒とリーダー</h3><p>名前を編集し、リーダー役にチェックを入れます</p></div>
+          <div class="maker-section-heading"><h3 id="makerRosterTitle">生徒・属性・種族</h3><p>名前や相性タイプ、リーダー役を編集できます</p></div>
           <div class="maker-roster" id="makerRoster"></div>
         </section>
         <section class="maker-section" aria-labelledby="makerRulesTitle">
-          <div class="maker-section-heading"><h3 id="makerRulesTitle">席替えの条件</h3><p>同じ班・別の班・となり・リーダー分散から選べます</p></div>
+          <div class="maker-section-heading"><h3 id="makerRulesTitle">席替えの条件</h3><p>班・席の位置・属性と種族の相性から選べます</p></div>
           <div class="maker-rules" id="makerRules"></div>
           <div class="maker-add-rule">
             <select id="makerNewRuleType" aria-label="追加する条件">
-              <option value="same">同じ班にする</option><option value="different">別の班にする</option><option value="adjacent">となり同士にする</option><option value="notAdjacent">となりをさける</option><option value="leaderSpread">リーダーを各班に分ける</option>
+              <option value="same">同じ班にする</option><option value="different">別の班にする</option><option value="adjacent">となり同士にする</option><option value="notAdjacent">となりをさける</option><option value="leaderSpread">リーダーを各班に分ける</option><option value="goodAffinity">相性のよい2人を同じ班に</option><option value="carefulAffinity">相性注意の2人を別の班に</option>
             </select>
             <select id="makerPersonA" aria-label="生徒1"></select>
             <select id="makerPersonB" aria-label="生徒2"></select>
@@ -307,6 +315,25 @@
     <div class="dialog"><div class="dialog-stamp confetti" aria-hidden="true">✓</div><h2 id="dialogTitle">ミッション成功！</h2><p id="dialogText"></p><button class="primary-button" id="dialogNext" type="button">つぎの難易度へ</button><button class="dialog-close" id="dialogClose" type="button">このまま教室を見る</button></div>
   </div>
   <script>
+    const elementTypes = [
+      { name: "炎", icon: "🔥", good: ["風", "闇"], careful: ["水", "光"] },
+      { name: "水", icon: "💧", good: ["岩", "光"], careful: ["炎", "雷"] },
+      { name: "岩", icon: "🪨", good: ["水", "雷"], careful: ["風", "闇"] },
+      { name: "風", icon: "🍃", good: ["炎", "雷"], careful: ["岩", "光"] },
+      { name: "雷", icon: "⚡", good: ["岩", "風"], careful: ["水", "闇"] },
+      { name: "闇", icon: "🌙", good: ["炎", "光"], careful: ["岩", "雷"] },
+      { name: "光", icon: "✨", good: ["水", "闇"], careful: ["炎", "風"] }
+    ];
+    const speciesTypes = [
+      { name: "人間", icon: "🧑", good: ["けもの", "妖精"], careful: ["ドラゴン", "天使"] },
+      { name: "けもの", icon: "🐾", good: ["人間", "ドラゴン"], careful: ["巨人", "魔族"] },
+      { name: "ドラゴン", icon: "🐉", good: ["けもの", "巨人"], careful: ["人間", "魔族"] },
+      { name: "妖精", icon: "🧚", good: ["人間", "天使"], careful: ["けもの", "魔族"] },
+      { name: "巨人", icon: "🗿", good: ["ドラゴン", "魔族"], careful: ["けもの", "天使"] },
+      { name: "魔族", icon: "👿", good: ["巨人", "天使"], careful: ["けもの", "ドラゴン", "妖精"] },
+      { name: "天使", icon: "👼", good: ["妖精", "魔族"], careful: ["人間", "巨人"] }
+    ];
+
     const levels = [
       {
         name: "イージー", story: "はじめての席替え。仲良しの子が安心できる班と、おしゃべりがはずみすぎない席を考えてみよう。",
@@ -367,6 +394,39 @@
       }
     ];
 
+    function typePairScore(firstName, secondName, types) {
+      if (firstName === secondName) return 0;
+      const firstType = types.find(type => type.name === firstName);
+      if (firstType.good.includes(secondName)) return 1;
+      if (firstType.careful.includes(secondName)) return -1;
+      return 0;
+    }
+    function compatibilityScore(first, second) {
+      return typePairScore(first.element, second.element, elementTypes)
+        + typePairScore(first.species, second.species, speciesTypes);
+    }
+    function createLevelProfiles(level, templateIndex) {
+      const profiles = level.teams.flat().map((name, index) => ({
+        name,
+        leader: (level.leaders || []).includes(name),
+        element: elementTypes[(index + templateIndex) % elementTypes.length].name,
+        species: speciesTypes[(index * 2 + templateIndex) % speciesTypes.length].name
+      }));
+      profiles[0].element = "炎";
+      profiles[0].species = "人間";
+      profiles[1].element = "風";
+      profiles[1].species = "けもの";
+      profiles[4].element = "水";
+      profiles[4].species = "ドラゴン";
+      return profiles;
+    }
+    levels.forEach((level, index) => {
+      const friendlyPair = [level.teams[0][0], level.teams[0][1]];
+      const carefulPair = [level.teams[0][0], level.teams[1][0]];
+      level.rules.push(makerRule("goodAffinity", friendlyPair));
+      level.rules.push(makerRule("carefulAffinity", carefulPair));
+    });
+
     const levelButtons = document.getElementById("levelButtons");
     const podsElement = document.getElementById("pods");
     const rosterElement = document.getElementById("roster");
@@ -399,7 +459,12 @@
       levelIndex = index;
       customLevel = customChallenge;
       const level = currentLevel();
-      students = level.teams.flat().map((name, studentIndex) => ({ id: `student-${studentIndex}`, name, leader: (level.leaders || []).includes(name) }));
+      const profiles = customChallenge?.studentProfiles || createLevelProfiles(level, index);
+      const profilesByName = new Map(profiles.map(profile => [profile.name, profile]));
+      students = level.teams.flat().map((name, studentIndex) => ({
+        ...profilesByName.get(name), id: `student-${studentIndex}`, name,
+        leader: (level.leaders || []).includes(name)
+      }));
       seats = shuffle(students.map(student => student.id));
       selectedStudent = null;
       resultElement.textContent = "席を入れかえて、ぜんぶの条件をクリアしよう。";
@@ -442,7 +507,7 @@
         name: `${template.name}のアレンジ`,
         templateIndex,
         groupCount: template.teams.length,
-        students: template.teams.flat().map(name => ({ name, leader: (template.leaders || []).includes(name) })),
+        students: createLevelProfiles(template, templateIndex),
         rules: template.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
       };
     }
@@ -452,13 +517,17 @@
         different: { icon: "↔", title: "別の班でチャレンジ" },
         adjacent: { icon: "☀", title: "声をかけやすい席" },
         notAdjacent: { icon: "♪", title: "集中できる距離" },
-        leaderSpread: { icon: "★", title: "リーダーを分けよう" }
+        leaderSpread: { icon: "★", title: "リーダーを分けよう" },
+        goodAffinity: { icon: "✨", title: "相性ぴったり" },
+        carefulAffinity: { icon: "↔", title: "相性のちがいに配慮" }
       };
       const [first, second] = people;
       const text = type === "same" ? `${first}さんと${second}さんは、同じ班にします。`
         : type === "different" ? `${first}さんと${second}さんは、別の班にします。`
         : type === "adjacent" ? `${first}さんと${second}さんは、同じ班のとなり同士にします。`
         : type === "notAdjacent" ? `${first}さんと${second}さんは、となり同士にならないようにします。`
+        : type === "goodAffinity" ? `${first}さんと${second}さんは、属性と種族の相性がよいので同じ班にします。`
+        : type === "carefulAffinity" ? `${first}さんと${second}さんは、相性のちがいに配慮して別の班にします。`
         : "リーダーの生徒を各班に1人ずつ配置します。";
       return { type, people: type === "leaderSpread" ? undefined : [...people], ...definitions[type], text };
     }
@@ -596,7 +665,13 @@
       while (students.length < groupCount * 4) {
         const name = namePool.shift() || `なまえ${students.length + 1}`;
         if (!usedNames.has(name)) {
-          students.push({ name, leader: false });
+          const profileIndex = students.length + makerDraft.templateIndex;
+          students.push({
+            name,
+            leader: false,
+            element: elementTypes[profileIndex % elementTypes.length].name,
+            species: speciesTypes[(profileIndex * 2) % speciesTypes.length].name
+          });
           usedNames.add(name);
         }
       }
