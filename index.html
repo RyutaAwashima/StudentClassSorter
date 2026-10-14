@@ -50,25 +50,15 @@
     .maker-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
     .maker-fields { display: grid; grid-template-columns: minmax(190px, 1.4fr) repeat(2, minmax(145px, .7fr)); gap: 12px; margin-bottom: 17px; }
     .maker-field { display: grid; gap: 6px; color: #5e706d; font-size: 11px; font-weight: 800; }
-    .maker-field input, .maker-field select, .maker-rule-row select, .maker-student input[type="text"] { width: 100%; min-width: 0; min-height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; color: var(--ink); background: #fff; font: inherit; }
+    .maker-field input, .maker-field select, .maker-student input[type="text"] { width: 100%; min-width: 0; min-height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; color: var(--ink); background: #fff; font: inherit; }
     .maker-section { border-top: 1px solid #e6e6dc; padding-top: 15px; margin-top: 15px; }
     .maker-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
     .maker-section-heading h3 { margin: 0; font-size: 14px; }
     .maker-section-heading p { margin: 0; color: var(--muted); font-size: 10px; }
     .maker-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 7px; }
-    .maker-student { display: grid; grid-template-columns: minmax(0, 1fr) minmax(68px, .65fr) minmax(78px, .75fr) auto; align-items: center; gap: 6px; min-height: 44px; border: 1px solid #e4e5dc; border-radius: 8px; padding: 4px 8px; background: #fffefa; }
+    .maker-student { display: grid; grid-template-columns: minmax(0, 1fr) minmax(68px, .65fr) minmax(78px, .75fr); align-items: center; gap: 6px; min-height: 44px; border: 1px solid #e4e5dc; border-radius: 8px; padding: 4px 8px; background: #fffefa; }
     .maker-student input[type="text"] { min-height: 32px; padding: 0 7px; font-size: 11px; }
     .maker-profile-select { min-width: 0; min-height: 32px; border: 1px solid var(--line); border-radius: 7px; padding: 0 4px; color: var(--ink); background: #fff; font: inherit; font-size: 10px; }
-    .leader-toggle { display: inline-flex; align-items: center; gap: 4px; color: #986a2e; white-space: nowrap; font-size: 10px; font-weight: 800; }
-    .leader-toggle input { accent-color: #ba8437; }
-    .maker-rules { display: grid; gap: 7px; }
-    .maker-rule-row { display: grid; grid-template-columns: minmax(130px, .85fr) minmax(100px, 1fr) minmax(100px, 1fr) 36px; align-items: center; gap: 7px; }
-    .maker-rule-row select { min-height: 36px; padding: 0 7px; font-size: 11px; }
-    .maker-rule-row select:disabled { opacity: .45; }
-    .remove-rule { width: 36px; height: 36px; border: 1px solid #e6d5cf; border-radius: 8px; color: #a35142; background: #fff8f4; cursor: pointer; font-size: 17px; }
-    .maker-add-rule { display: grid; grid-template-columns: minmax(140px, .9fr) minmax(100px, 1fr) minmax(100px, 1fr) auto; gap: 7px; margin-top: 10px; }
-    .maker-add-rule select { min-height: 40px; border: 1px solid var(--line); border-radius: 8px; padding: 0 8px; color: var(--ink); background: #fff; font: inherit; font-size: 11px; }
-    .maker-add-rule .primary-button { min-height: 40px; padding: 0 11px; font-size: 11px; }
     .maker-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 17px; border-top: 1px solid #e6e6dc; padding-top: 15px; }
     .maker-note { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
     [hidden] { display: none !important; }
@@ -101,7 +91,6 @@
     .seat-name { display: block; overflow: hidden; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
     .seat-traits { display: flex; justify-content: center; gap: 5px; margin-top: 4px; color: #657673; font-size: 9px; line-height: 1.2; white-space: nowrap; }
     .seat-caption { display: block; margin-top: 4px; color: #82918b; font-size: 9px; }
-    .seat.leader .seat-name::after { content: " ★"; color: #d28a36; }
     .room-footnote { margin: 13px 1px 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
     .mission-panel { min-width: 0; overflow: hidden; }
     .fold-summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 58px; padding: 12px 16px; cursor: pointer; list-style: none; }
@@ -111,23 +100,15 @@
     .fold-heading { font-size: 15px; font-weight: 800; }
     .fold-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
     .fold-count { border-radius: 20px; padding: 4px 8px; color: var(--green-dark); background: var(--mint); font-size: 10px; font-weight: 800; white-space: nowrap; }
-    .fold-status { color: #9a6439; font-size: 10px; font-weight: 800; white-space: nowrap; }
-    .fold-status.all-clear { color: #397861; }
     .fold-content { padding: 0 16px 16px; }
-    .rule-count { border-radius: 20px; padding: 4px 8px; color: var(--green-dark); background: var(--mint); font-size: 10px; font-weight: 800; white-space: nowrap; }
-    .story { margin: 10px 0 15px; color: #5e706d; font-size: 12px; line-height: 1.75; }
-    .rules { display: grid; gap: 9px; list-style: none; margin: 0; padding: 0; }
-    .rule { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; align-items: start; border: 1px solid #e8e8df; border-radius: 9px; padding: 9px; background: #fffefa; font-size: 11px; line-height: 1.65; }
-    .rule-icon { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 7px; background: #edf4e9; font-size: 14px; }
-    .rule strong { display: block; margin-bottom: 2px; font-size: 11px; }
-    .rule-status { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: #a06539; font-size: 10px; font-weight: 800; }
-    .rule-status.ok { color: #397861; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #dc8d50; }
-    .rule-status.ok .status-dot { background: #55a477; }
-    .mission-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 15px; }
-    .mission-actions button { min-height: 42px; }
-    .check-result { min-height: 18px; margin: 9px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
-    .check-result.success { color: #34745a; font-weight: 800; }
+    .affinity-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .affinity-grid h3 { margin: 4px 0 8px; font-size: 13px; }
+    .affinity-table-wrap { overflow-x: auto; }
+    .affinity-table { width: 100%; border-collapse: collapse; font-size: 10px; line-height: 1.5; }
+    .affinity-table th, .affinity-table td { border-bottom: 1px solid #e7e8df; padding: 5px 4px; text-align: left; vertical-align: top; }
+    .affinity-table thead th { color: #687a78; font-weight: 800; }
+    .affinity-table tbody th { white-space: nowrap; }
+    .affinity-note { margin: 10px 0 0; color: var(--muted); font-size: 10px; }
     .roster-panel { min-width: 0; overflow: hidden; }
     .roster-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 11px; }
     .roster-heading p { margin: 0; color: var(--muted); font-size: 10px; }
@@ -141,23 +122,10 @@
     .student-copy { display: grid; min-width: 0; gap: 2px; }
     .student-primary { display: flex; align-items: center; gap: 4px; min-width: 0; }
     .student-traits { overflow: hidden; color: #657673; font-size: 9px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-    .student .leader-mark { color: #d28a36; font-size: 10px; }
     .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; color: var(--muted); font-size: 10px; }
     .legend span { display: inline-flex; align-items: center; gap: 4px; }
-    .legend-star { color: #d28a36; }
     .toast { position: fixed; right: 20px; bottom: 20px; z-index: 5; max-width: min(380px, calc(100vw - 40px)); border-radius: 10px; padding: 12px 16px; color: #fff; background: var(--ink); box-shadow: var(--shadow); font-size: 13px; line-height: 1.5; opacity: 0; transform: translateY(10px); pointer-events: none; transition: .2s; }
     .toast.show { opacity: 1; transform: translateY(0); }
-    .overlay { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgb(24 42 39 / 48%); opacity: 0; pointer-events: none; transition: opacity .2s; }
-    .overlay.open { opacity: 1; pointer-events: auto; }
-    .dialog { width: min(420px, 100%); border: 1px solid #e1e0d5; border-radius: 16px; padding: 25px; background: var(--white); box-shadow: 0 16px 48px rgb(0 0 0 / 20%); text-align: center; transform: translateY(8px); transition: transform .2s; }
-    .overlay.open .dialog { transform: translateY(0); }
-    .dialog-stamp { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 12px; border-radius: 50%; color: #fff; background: var(--green); font-size: 28px; }
-    .dialog h2 { margin: 0 0 7px; font-size: 21px; }
-    .dialog p { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .dialog .primary-button { min-width: 150px; }
-    .dialog-close { display: block; margin: 10px auto 0; border: 0; padding: 7px 12px; color: var(--muted); background: transparent; cursor: pointer; font-size: 11px; }
-    .confetti { animation: pop .45s ease-out both; }
-    @keyframes pop { from { opacity: 0; transform: scale(.55) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
     @media (max-width: 960px) {
       .app { padding-right: 18px; padding-left: 18px; }
       .maker-fields { grid-template-columns: minmax(160px, 1.2fr) repeat(2, minmax(125px, .8fr)); }
@@ -182,21 +150,15 @@
       .maker-roster { grid-template-columns: 1fr; }
       .maker-student { grid-template-columns: minmax(0, 1fr) minmax(110px, .8fr); }
       .maker-student input[type="text"] { grid-column: 1 / -1; }
-      .leader-toggle { grid-column: 1 / -1; }
-      .maker-rule-row { grid-template-columns: minmax(110px, 1fr) minmax(95px, 1fr) minmax(95px, 1fr) 36px; gap: 5px; }
-      .maker-add-rule { grid-template-columns: 1fr 1fr; }
-      .maker-add-rule .primary-button { min-height: 38px; }
       .level-bar { gap: 6px; }
       .level-label { width: 100%; }
       .level-button { flex: 1; min-width: 54px; padding: 0 7px; font-size: 11px; }
       .workspace { grid-template-columns: 1fr; }
       .control-panels { grid-template-columns: 1fr; }
+      .affinity-grid { grid-template-columns: 1fr; }
       .room-panel { position: static; grid-row: 1; padding: 13px; }
       .fold-summary { min-height: 52px; padding: 10px 13px; }
       .fold-content { padding: 0 13px 13px; }
-      .rules { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-      .story { margin-bottom: 10px; }
-      .mission-actions { margin-top: 10px; }
       .roster-panel { margin-top: 0; }
       .roster { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
       .student { min-height: 46px; font-size: 10px; }
@@ -211,10 +173,6 @@
     }
     @media (max-width: 380px) {
       .pod { padding: 8px; }
-      .maker-rule-row { grid-template-columns: minmax(0, 1fr) 36px; }
-      .maker-rule-row select { grid-column: 1 / -1; }
-      .maker-rule-row .remove-rule { grid-column: 2; }
-      .maker-add-rule .primary-button { grid-column: 1 / -1; }
       .seat { min-height: 58px; }
       .room-heading h2 { font-size: 16px; }
       .room-meta { font-size: 10px; }
@@ -245,7 +203,7 @@
     <main>
       <section class="maker-view" id="makerView" aria-labelledby="makerTitle" hidden>
         <div class="maker-heading">
-          <div><p class="eyebrow">CHALLENGE BUILDER</p><h2 id="makerTitle">オリジナルの席替えをつくる</h2><p>生徒や条件を決めたら、席順画面で実際にチャレンジできます。</p></div>
+          <div><p class="eyebrow">CHALLENGE BUILDER</p><h2 id="makerTitle">オリジナルのクラスをつくる</h2><p>生徒の属性や種族を組み合わせて席替えできます。</p></div>
         </div>
         <div class="maker-fields">
           <label class="maker-field">チャレンジ名<input id="makerName" type="text" maxlength="28" value="マイチャレンジ" autocomplete="off"></label>
@@ -253,24 +211,12 @@
           <label class="maker-field">班の数<select id="makerTeamCount"><option value="2">2班</option><option value="3">3班</option><option value="4">4班</option><option value="5">5班</option><option value="6">6班</option><option value="7">7班</option></select></label>
         </div>
         <section class="maker-section" aria-labelledby="makerRosterTitle">
-          <div class="maker-section-heading"><h3 id="makerRosterTitle">生徒・属性・種族</h3><p>名前や相性タイプ、リーダー役を編集できます</p></div>
+          <div class="maker-section-heading"><h3 id="makerRosterTitle">生徒・属性・種族</h3><p>名前や属性、種族を編集できます</p></div>
           <div class="maker-roster" id="makerRoster"></div>
         </section>
-        <section class="maker-section" aria-labelledby="makerRulesTitle">
-          <div class="maker-section-heading"><h3 id="makerRulesTitle">席替えの条件</h3><p>班・席の位置・属性と種族の相性から選べます</p></div>
-          <div class="maker-rules" id="makerRules"></div>
-          <div class="maker-add-rule">
-            <select id="makerNewRuleType" aria-label="追加する条件">
-              <option value="same">同じ班にする</option><option value="different">別の班にする</option><option value="adjacent">となり同士にする</option><option value="notAdjacent">となりをさける</option><option value="leaderSpread">リーダーを各班に分ける</option><option value="goodAffinity">相性のよい2人を同じ班に</option><option value="carefulAffinity">相性注意の2人を別の班に</option>
-            </select>
-            <select id="makerPersonA" aria-label="生徒1"></select>
-            <select id="makerPersonB" aria-label="生徒2"></select>
-            <button class="primary-button" id="addRuleButton" type="button">＋ 条件を追加</button>
-          </div>
-        </section>
         <div class="maker-footer">
-          <p class="maker-note">1班は4人です。リーダー分散を使うときは、リーダーの人数と班数をそろえてください。</p>
-          <button class="primary-button" id="playCustomButton" type="button">この条件であそぶ</button>
+          <p class="maker-note">1班は4人です。属性・種族は生徒ごとに自由に変更できます。</p>
+          <button class="primary-button" id="playCustomButton" type="button">このクラスであそぶ</button>
         </div>
       </section>
       <div class="workspace" id="playView">
@@ -284,16 +230,17 @@
           </div>
           <p class="room-footnote">名簿を開いて生徒をえらび、うつりたい席をおすと交代できます。名前をドラッグしてもOK。</p>
         </section>
-        <aside class="control-panels" aria-label="条件と生徒名簿">
-          <details class="mission-panel" id="missionPanel">
+        <aside class="control-panels" aria-label="相性と生徒名簿">
+          <details class="mission-panel" id="compatibilityPanel" open>
             <summary class="fold-summary">
-              <span class="fold-title"><span class="fold-heading" id="missionTitle">今回の条件</span><span class="fold-count" id="ruleCount"></span><span class="fold-status" id="conditionSummary"></span></span>
+              <span class="fold-title"><span class="fold-heading">それぞれの相性</span><span class="fold-count">属性・種族</span></span>
             </summary>
             <div class="fold-content">
-              <p class="story" id="story"></p>
-              <ul class="rules" id="rules"></ul>
-              <div class="mission-actions"><button class="primary-button" id="checkButton" type="button">できたかチェック</button><button class="quiet-button" id="hintButton" type="button" title="まだできていない条件を確認">ヒント</button></div>
-              <p class="check-result" id="checkResult" aria-live="polite">席を入れかえて、ぜんぶの条件をクリアしよう。</p>
+              <div class="affinity-grid">
+                <section aria-labelledby="elementAffinityTitle"><h3 id="elementAffinityTitle">属性相性</h3><div id="elementAffinityTable"></div></section>
+                <section aria-labelledby="speciesAffinityTitle"><h3 id="speciesAffinityTitle">種族相性</h3><div id="speciesAffinityTable"></div></section>
+              </div>
+              <p class="affinity-note">⭕️は相性がよい組み合わせ、❌は工夫がいる組み合わせです。表にない組み合わせはふつうです。</p>
             </div>
           </details>
           <details class="roster-panel" id="rosterPanel">
@@ -301,9 +248,8 @@
               <span class="fold-title"><span class="fold-heading" id="rosterTitle">クラスの名簿</span><span class="fold-count" id="rosterCount"></span></span>
             </summary>
             <div class="fold-content">
-              <div class="roster-heading"><p>★はリーダー気質。生徒をえらんで席をクリックすると交代します。</p></div>
               <div class="roster" id="roster"></div>
-              <div class="legend"><span><b class="legend-star">★</b> リーダー</span><span>😀 条件OK</span><span>😭 条件未達</span></div>
+              <div class="legend"><span>⭕️ 班に相性注意の相手なし</span><span>❌ 班に相性注意の相手あり</span></div>
             </div>
           </details>
         </aside>
@@ -311,9 +257,6 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
-    <div class="dialog"><div class="dialog-stamp confetti" aria-hidden="true">✓</div><h2 id="dialogTitle">ミッション成功！</h2><p id="dialogText"></p><button class="primary-button" id="dialogNext" type="button">つぎの難易度へ</button><button class="dialog-close" id="dialogClose" type="button">このまま教室を見る</button></div>
-  </div>
   <script>
     const elementTypes = [
       { name: "炎", icon: "🔥", good: ["風", "闇"], careful: ["水", "光"] },
@@ -338,59 +281,22 @@
       {
         name: "イージー", story: "はじめての席替え。仲良しの子が安心できる班と、おしゃべりがはずみすぎない席を考えてみよう。",
         teams: [["りく", "あおい", "はる", "みお"], ["ゆうた", "さくら", "けん", "ひな"], ["そうた", "えま", "たくみ", "ここ"]],
-        rules: [
-          { type: "same", people: ["はる", "みお"], icon: "☺", title: "安心できる友だち", text: "はるさんとみおさんは、同じ班だと安心してすごせるよ。" },
-          { type: "notAdjacent", people: ["りく", "みお"], icon: "♪", title: "おしゃべりコンビ", text: "りくさんとみおさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
-          { type: "different", people: ["けん", "そうた"], icon: "↔", title: "気持ちを切りかえて", text: "けんさんとそうたさんは、今は別の班で落ちついてすごしたいそうです。" }
-        ]
       },
       {
-        name: "ノーマル", story: "班の数がふえたよ。友だちとの安心感を大切にしながら、リーダー役もかたよらないようにしよう。",
+        name: "ノーマル", story: "班の数がふえたよ。友だちとの安心感を大切にしながら、みんなが過ごしやすい配置を考えよう。",
         teams: [["あかり", "ゆう", "けんた", "れん"], ["みな", "はると", "ゆい", "あお"], ["さな", "りく", "そう", "えま"], ["まお", "たくみ", "めい", "ひろ"]],
-        leaders: ["けんた", "ゆい", "そう", "めい"],
-        rules: [
-          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの4人が、1つの班に1人ずつ入るようにしよう。" },
-          { type: "same", people: ["さな", "りく"], icon: "☺", title: "安心できる友だち", text: "さなさんとりくさんは、同じ班だと安心してすごせるよ。" },
-          { type: "notAdjacent", people: ["あかり", "れん"], icon: "♪", title: "おしゃべりコンビ", text: "あかりさんとれんさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
-          { type: "different", people: ["あお", "ひろ"], icon: "↔", title: "ちがう班でチャレンジ", text: "あおさんとひろさんは、ちがう班で新しい友だちとすごしてみたいそうです。" }
-        ]
       },
       {
         name: "ハード", story: "5つの班をバランスよく。みんなの関係だけでなく、困ったときに声をかけられる人の配置も考えよう。",
         teams: [["あかり", "けん", "りく", "まな"], ["はる", "そうた", "ゆい", "こう"], ["みお", "たくみ", "えいと", "さな"], ["ゆう", "ひなた", "しゅん", "ここ"], ["れん", "あおい", "なお", "みな"]],
-        leaders: ["けん", "ゆい", "えいと", "しゅん", "なお"],
-        rules: [
-          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの5人が、1つの班に1人ずつ入るようにしよう。" },
-          { type: "same", people: ["りく", "まな"], icon: "☺", title: "安心できる友だち", text: "りくさんとまなさんは、同じ班だと安心してすごせるよ。" },
-          { type: "adjacent", people: ["はる", "そうた"], icon: "☀", title: "声をかけやすい席", text: "はるさんが少し不安なとき、仲良しのそうたさんがとなりにいると安心。" },
-          { type: "different", people: ["あかり", "ゆう"], icon: "↔", title: "気持ちを切りかえて", text: "あかりさんとゆうさんは、今は別の班で落ちついてすごしたいそうです。" }
-        ]
       },
       {
-        name: "エクストラ", story: "6つの班、それぞれにちがう個性があるよ。安心できる相手、集中しやすい距離、リーダーの分担を全部かなえよう。",
+        name: "エクストラ", story: "6つの班、それぞれにちがう個性があるよ。属性と種族の相性を考えて配置しよう。",
         teams: [["みな", "あお", "だいち", "りく"], ["ゆい", "はる", "けん", "まお"], ["そら", "あかり", "れん", "えま"], ["なお", "ひな", "そうた", "めい"], ["たくみ", "もも", "りお", "ゆう"], ["かい", "さな", "ひろ", "るか"]],
-        leaders: ["だいち", "けん", "そら", "なお", "たくみ", "かい"],
-        rules: [
-          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの6人が、1つの班に1人ずつ入るようにしよう。" },
-          { type: "same", people: ["さな", "ひろ"], icon: "☺", title: "安心できる友だち", text: "さなさんとひろさんは、同じ班だと安心してすごせるよ。" },
-          { type: "different", people: ["まお", "ひろ"], icon: "↔", title: "ちがう班でチャレンジ", text: "まおさんとひろさんは、ちがう班で新しい友だちとすごしてみたいそうです。" },
-          { type: "notAdjacent", people: ["みな", "りく"], icon: "♪", title: "集中できる距離", text: "みなさんとりくさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
-          { type: "adjacent", people: ["もも", "ゆう"], icon: "☀", title: "声をかけやすい席", text: "ももさんが困ったとき、仲良しのゆうさんがとなりにいると安心。" }
-        ]
       },
       {
-        name: "インフェルノ", story: "最後のチャレンジは7つの班。ひとりひとりが安心して学べるよう、条件をひとつずつ整理して席を決めよう。",
+        name: "インフェルノ", story: "最後のチャレンジは7つの班。属性と種族の組み合わせに気を配りながら、席を決めよう。",
         teams: [["あおい", "はる", "りく", "みお"], ["けんた", "さくら", "なお", "れん"], ["ゆう", "ここ", "しゅん", "えま"], ["たくみ", "ひな", "そう", "まこと"], ["みな", "ひろ", "りお", "ゆい"], ["かい", "まお", "えいと", "さな"], ["だいち", "もも", "あきら", "るか"]],
-        leaders: ["はる", "けんた", "しゅん", "まこと", "ゆい", "えいと", "だいち"],
-        rules: [
-          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの7人が、1つの班に1人ずつ入るようにしよう。" },
-          { type: "same", people: ["りく", "みお"], icon: "☺", title: "安心できる友だち", text: "りくさんとみおさんは、同じ班だと安心してすごせるよ。" },
-          { type: "same", people: ["えいと", "さな"], icon: "☺", title: "安心できる友だち", text: "えいとさんとさなさんは、同じ班だと安心してすごせるよ。" },
-          { type: "adjacent", people: ["ひな", "まこと"], icon: "☀", title: "声をかけやすい席", text: "ひなさんが少し不安なとき、仲良しのまことさんがとなりにいると安心。" },
-          { type: "different", people: ["なお", "ひろ"], icon: "↔", title: "気持ちを切りかえて", text: "なおさんとひろさんは、今は別の班で落ちついてすごしたいそうです。" },
-          { type: "different", people: ["まお", "もも"], icon: "↔", title: "ちがう班でチャレンジ", text: "まおさんとももさんは、ちがう班で新しい友だちとすごしてみたいそうです。" },
-          { type: "notAdjacent", people: ["みな", "ゆい"], icon: "♪", title: "集中できる距離", text: "みなさんとゆいさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" }
-        ]
       }
     ];
 
@@ -408,7 +314,6 @@
     function createLevelProfiles(level, templateIndex) {
       const profiles = level.teams.flat().map((name, index) => ({
         name,
-        leader: (level.leaders || []).includes(name),
         element: elementTypes[(index + templateIndex) % elementTypes.length].name,
         species: speciesTypes[(index * 2 + templateIndex) % speciesTypes.length].name
       }));
@@ -420,23 +325,13 @@
       profiles[4].species = "ドラゴン";
       return profiles;
     }
-    levels.forEach((level, index) => {
-      const friendlyPair = [level.teams[0][0], level.teams[0][1]];
-      const carefulPair = [level.teams[0][0], level.teams[1][0]];
-      level.rules.push(makerRule("goodAffinity", friendlyPair));
-      level.rules.push(makerRule("carefulAffinity", carefulPair));
-    });
 
     const levelButtons = document.getElementById("levelButtons");
     const podsElement = document.getElementById("pods");
     const rosterElement = document.getElementById("roster");
-    const rulesElement = document.getElementById("rules");
-    const resultElement = document.getElementById("checkResult");
-    const overlay = document.getElementById("overlay");
     const difficultyNav = document.getElementById("difficultyNav");
     const playView = document.getElementById("playView");
     const makerView = document.getElementById("makerView");
-    const completedLevels = new Set();
     let levelIndex = 0;
     let students = [];
     let seats = [];
@@ -462,13 +357,10 @@
       const profiles = customChallenge?.studentProfiles || createLevelProfiles(level, index);
       const profilesByName = new Map(profiles.map(profile => [profile.name, profile]));
       students = level.teams.flat().map((name, studentIndex) => ({
-        ...profilesByName.get(name), id: `student-${studentIndex}`, name,
-        leader: (level.leaders || []).includes(name)
+        ...profilesByName.get(name), id: `student-${studentIndex}`, name
       }));
       seats = shuffle(students.map(student => student.id));
       selectedStudent = null;
-      resultElement.textContent = "席を入れかえて、ぜんぶの条件をクリアしよう。";
-      resultElement.className = "check-result";
       render();
     }
     function render() {
@@ -476,7 +368,7 @@
       renderLevelButtons();
       renderRoom();
       renderRoster();
-      renderMission();
+      renderCompatibility();
       if (gameMode === "maker") renderMaker();
     }
     function renderMode() {
@@ -494,7 +386,7 @@
       levels.forEach((level, index) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = `level-button${completedLevels.has(index) ? " completed" : ""}`;
+        button.className = "level-button";
         button.textContent = level.name;
         button.setAttribute("aria-current", String(index === levelIndex));
         button.addEventListener("click", () => { gameMode = "play"; startLevel(index); });
@@ -507,29 +399,8 @@
         name: `${template.name}のアレンジ`,
         templateIndex,
         groupCount: template.teams.length,
-        students: createLevelProfiles(template, templateIndex),
-        rules: template.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
+        students: createLevelProfiles(template, templateIndex)
       };
-    }
-    function makerRule(type, people = []) {
-      const definitions = {
-        same: { icon: "☺", title: "安心できる友だち" },
-        different: { icon: "↔", title: "別の班でチャレンジ" },
-        adjacent: { icon: "☀", title: "声をかけやすい席" },
-        notAdjacent: { icon: "♪", title: "集中できる距離" },
-        leaderSpread: { icon: "★", title: "リーダーを分けよう" },
-        goodAffinity: { icon: "✨", title: "相性ぴったり" },
-        carefulAffinity: { icon: "↔", title: "相性のちがいに配慮" }
-      };
-      const [first, second] = people;
-      const text = type === "same" ? `${first}さんと${second}さんは、同じ班にします。`
-        : type === "different" ? `${first}さんと${second}さんは、別の班にします。`
-        : type === "adjacent" ? `${first}さんと${second}さんは、同じ班のとなり同士にします。`
-        : type === "notAdjacent" ? `${first}さんと${second}さんは、となり同士にならないようにします。`
-        : type === "goodAffinity" ? `${first}さんと${second}さんは、属性と種族の相性がよいので同じ班にします。`
-        : type === "carefulAffinity" ? `${first}さんと${second}さんは、相性のちがいに配慮して別の班にします。`
-        : "リーダーの生徒を各班に1人ずつ配置します。";
-      return { type, people: type === "leaderSpread" ? undefined : [...people], ...definitions[type], text };
     }
     function renderMaker() {
       if (!makerDraft) return;
@@ -553,11 +424,7 @@
             renderMaker();
             return;
           }
-          const oldName = student.name;
           student.name = name;
-          makerDraft.rules = makerDraft.rules.map(rule => rule.people && rule.people.includes(oldName)
-            ? makerRule(rule.type, rule.people.map(person => person === oldName ? name : person))
-            : rule);
           renderMaker();
         });
         const elementSelect = document.createElement("select");
@@ -570,88 +437,8 @@
         speciesSelect.setAttribute("aria-label", `${student.name}の種族`);
         addProfileOptions(speciesSelect, speciesTypes, student.species);
         speciesSelect.addEventListener("change", () => { student.species = speciesSelect.value; });
-        const leaderLabel = document.createElement("label");
-        leaderLabel.className = "leader-toggle";
-        const leaderCheck = document.createElement("input");
-        leaderCheck.type = "checkbox";
-        leaderCheck.checked = student.leader;
-        leaderCheck.setAttribute("aria-label", `${student.name}をリーダーにする`);
-        leaderCheck.addEventListener("change", () => { student.leader = leaderCheck.checked; });
-        leaderLabel.append(leaderCheck, document.createTextNode("★ リーダー"));
-        row.append(nameInput, elementSelect, speciesSelect, leaderLabel);
+        row.append(nameInput, elementSelect, speciesSelect);
         roster.append(row);
-      });
-      renderMakerRules();
-      renderMakerPersonOptions();
-      updateNewRulePeopleVisibility();
-    }
-    function renderMakerRules() {
-      const list = document.getElementById("makerRules");
-      list.innerHTML = "";
-      makerDraft.rules.forEach((rule, index) => {
-        const row = document.createElement("div");
-        row.className = "maker-rule-row";
-        const typeSelect = document.createElement("select");
-        typeSelect.setAttribute("aria-label", `条件${index + 1}の種類`);
-        addRuleTypeOptions(typeSelect, rule.type);
-        typeSelect.addEventListener("change", () => {
-          const people = typeSelect.value === "leaderSpread" ? [] : (rule.people || [makerDraft.students[0].name, makerDraft.students[1].name]);
-          makerDraft.rules[index] = makerRule(typeSelect.value, people);
-          renderMakerRules();
-        });
-        row.append(typeSelect);
-        if (rule.type === "leaderSpread") {
-          const note = document.createElement("span");
-          note.className = "maker-note";
-          note.textContent = "各班に1人";
-          note.style.gridColumn = "span 2";
-          row.append(note);
-        } else {
-          rule.people.forEach((person, personIndex) => {
-            const select = document.createElement("select");
-            select.setAttribute("aria-label", `条件${index + 1}の生徒${personIndex + 1}`);
-            addStudentOptions(select, person);
-            select.addEventListener("change", () => {
-              const newPeople = [...rule.people];
-              newPeople[personIndex] = select.value;
-              if (newPeople[0] === newPeople[1]) {
-                showToast("条件にはちがう生徒を2人えらんでください。");
-                renderMakerRules();
-                return;
-              }
-              makerDraft.rules[index] = makerRule(rule.type, newPeople);
-              renderMakerRules();
-            });
-            row.append(select);
-          });
-        }
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "remove-rule";
-        remove.textContent = "×";
-        remove.setAttribute("aria-label", `条件${index + 1}を削除`);
-        remove.addEventListener("click", () => { makerDraft.rules.splice(index, 1); renderMaker(); });
-        row.append(remove);
-        list.append(row);
-      });
-    }
-    function addRuleTypeOptions(select, selected) {
-      const options = [["same", "同じ班にする"], ["different", "別の班にする"], ["adjacent", "となり同士にする"], ["notAdjacent", "となりをさける"], ["leaderSpread", "リーダーを各班に分ける"], ["goodAffinity", "相性のよい2人を同じ班に"], ["carefulAffinity", "相性注意の2人を別の班に"]];
-      options.forEach(([value, label]) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = label;
-        option.selected = value === selected;
-        select.append(option);
-      });
-    }
-    function addStudentOptions(select, selected) {
-      makerDraft.students.forEach(student => {
-        const option = document.createElement("option");
-        option.value = student.name;
-        option.textContent = student.name;
-        option.selected = student.name === selected;
-        select.append(option);
       });
     }
     function addProfileOptions(select, types, selected) {
@@ -663,20 +450,6 @@
         select.append(option);
       });
     }
-    function renderMakerPersonOptions() {
-      ["makerPersonA", "makerPersonB"].forEach((id, index) => {
-        const select = document.getElementById(id);
-        const previous = select.value;
-        select.innerHTML = "";
-        const preferred = makerDraft.students[index]?.name;
-        addStudentOptions(select, makerDraft.students.some(student => student.name === previous) ? previous : preferred);
-      });
-    }
-    function updateNewRulePeopleVisibility() {
-      const isLeaderRule = document.getElementById("makerNewRuleType").value === "leaderSpread";
-      document.getElementById("makerPersonA").hidden = isLeaderRule;
-      document.getElementById("makerPersonB").hidden = isLeaderRule;
-    }
     function resizeMakerDraft(groupCount) {
       const students = [...makerDraft.students];
       const usedNames = new Set(students.map(student => student.name));
@@ -687,7 +460,6 @@
           const profileIndex = students.length + makerDraft.templateIndex;
           students.push({
             name,
-            leader: false,
             element: elementTypes[profileIndex % elementTypes.length].name,
             species: speciesTypes[(profileIndex * 2) % speciesTypes.length].name
           });
@@ -695,12 +467,8 @@
         }
       }
       const nextStudents = students.slice(0, groupCount * 4);
-      const available = new Set(nextStudents.map(student => student.name));
-      const previousRuleCount = makerDraft.rules.length;
       makerDraft.students = nextStudents;
       makerDraft.groupCount = groupCount;
-      makerDraft.rules = makerDraft.rules.filter(rule => !rule.people || rule.people.every(name => available.has(name)));
-      if (makerDraft.rules.length < previousRuleCount) showToast("生徒をへらしたため、その生徒を使っていた条件を取りのぞきました。");
       renderMaker();
     }
     function enterMaker() {
@@ -720,50 +488,25 @@
         showToast("チャレンジ名と、重ならない生徒の名前を入力してください。");
         return;
       }
-      if (!makerDraft.rules.length) {
-        showToast("条件を1つ以上追加してください。");
-        return;
-      }
-      if (makerDraft.rules.some(rule => rule.type === "leaderSpread") && makerDraft.students.filter(student => student.leader).length !== makerDraft.groupCount) {
-        showToast("リーダー分散の条件には、班と同じ人数のリーダーが必要です。");
-        return;
-      }
-      const profilesByName = new Map(makerDraft.students.map(student => [student.name, student]));
-      const invalidAffinityRule = makerDraft.rules.find(rule => {
-        if (rule.type !== "goodAffinity" && rule.type !== "carefulAffinity") return false;
-        const score = compatibilityScore(profilesByName.get(rule.people[0]), profilesByName.get(rule.people[1]));
-        return rule.type === "goodAffinity" ? score <= 0 : score >= 0;
-      });
-      if (invalidAffinityRule) {
-        showToast("相性条件に合う属性・種族のペアを選んでください。");
-        return;
-      }
       const teams = Array.from({ length: makerDraft.groupCount }, (_, groupIndex) => names.slice(groupIndex * 4, groupIndex * 4 + 4));
       customLevel = {
         name: makerDraft.name.trim(),
         story: "オリジナルの条件にチャレンジ！みんなが安心できる席を考えよう。",
         teams,
-        leaders: makerDraft.students.filter(student => student.leader).map(student => student.name),
-        studentProfiles: makerDraft.students.map(({ name, element, species }) => ({ name, element, species })),
-        rules: makerDraft.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
+        studentProfiles: makerDraft.students.map(({ name, element, species }) => ({ name, element, species }))
       };
       gameMode = "play";
       startLevel(levelIndex, customLevel);
     }
     function studentById(id) { return students.find(student => student.id === id); }
     function studentMood(student) {
-      const relevantRules = currentLevel().rules.filter(rule => rule.type === "leaderSpread"
-        ? student.leader
-        : rule.people.includes(student.name));
-      const isHappy = relevantRules.every(rule => {
-        if (rule.type !== "leaderSpread") return evaluateRule(rule).ok;
-        const groupIndex = groupAt(findSeat(student.id));
-        return seats.slice(groupIndex * 4, groupIndex * 4 + 4)
-          .filter(id => studentById(id).leader).length === 1;
-      });
-      return isHappy
-        ? { face: "😀", label: "関係する条件はクリア" }
-        : { face: "😭", label: "関係する条件に未達あり" };
+      const groupIndex = groupAt(findSeat(student.id));
+      const hasCarefulMatch = seats.slice(groupIndex * 4, groupIndex * 4 + 4)
+        .map(studentById)
+        .some(other => other.id !== student.id && compatibilityScore(student, other) < 0);
+      return hasCarefulMatch
+        ? { face: "❌", label: "同じ班に相性注意の相手がいます" }
+        : { face: "⭕️", label: "同じ班に相性注意の相手はいません" };
     }
     function renderRoom() {
       const level = currentLevel();
@@ -784,8 +527,8 @@
           const mood = studentMood(student);
           const button = document.createElement("button");
           button.type = "button";
-          button.className = `seat${student.leader ? " leader" : ""}${selectedStudent === student.id ? " selected" : ""}`;
-          button.setAttribute("aria-label", `${groupIndex + 1}班、${chairName(chair)}、${student.name}、${student.element}、${student.species}、${mood.label}${student.leader ? "、リーダー" : ""}`);
+          button.className = `seat${selectedStudent === student.id ? " selected" : ""}`;
+          button.setAttribute("aria-label", `${groupIndex + 1}班、${chairName(chair)}、${student.name}、${student.element}、${student.species}、${mood.label}`);
           button.innerHTML = `<span class="seat-person"><span class="seat-face" aria-hidden="true">${mood.face}</span><span class="seat-name">${student.name}</span></span><span class="seat-traits">${traitLabel(student)}</span><span class="seat-caption">${chairName(chair)}</span>`;
           button.addEventListener("click", () => handleSeatClick(seatIndex));
           button.addEventListener("dragover", event => { event.preventDefault(); button.classList.add("drop-target"); });
@@ -808,6 +551,44 @@
       const species = speciesTypes.find(type => type.name === student.species);
       return `${element.icon} ${element.name} · ${species.icon} ${species.name}`;
     }
+    function renderCompatibility() {
+      renderCompatibilityTable("elementAffinityTable", elementTypes);
+      renderCompatibilityTable("speciesAffinityTable", speciesTypes);
+      document.getElementById("rosterCount").textContent = `${students.length}人`;
+    }
+    function renderCompatibilityTable(containerId, types) {
+      const container = document.getElementById(containerId);
+      const wrapper = document.createElement("div");
+      wrapper.className = "affinity-table-wrap";
+      const table = document.createElement("table");
+      table.className = "affinity-table";
+      const head = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      ["種類", "⭕️ 相性よし", "❌ 工夫がいる"].forEach(label => {
+        const cell = document.createElement("th");
+        cell.scope = "col";
+        cell.textContent = label;
+        headerRow.append(cell);
+      });
+      head.append(headerRow);
+      const body = document.createElement("tbody");
+      types.forEach(type => {
+        const row = document.createElement("tr");
+        const name = document.createElement("th");
+        name.scope = "row";
+        name.textContent = `${type.icon} ${type.name}`;
+        row.append(name);
+        [type.good, type.careful].forEach(matches => {
+          const cell = document.createElement("td");
+          cell.textContent = matches.join("・");
+          row.append(cell);
+        });
+        body.append(row);
+      });
+      table.append(head, body);
+      wrapper.append(table);
+      container.replaceChildren(wrapper);
+    }
     function renderRoster() {
       rosterElement.innerHTML = "";
       students.forEach(student => {
@@ -817,77 +598,16 @@
         button.draggable = true;
         button.setAttribute("aria-pressed", String(selectedStudent === student.id));
         const mood = studentMood(student);
-        button.setAttribute("aria-label", `${student.name}、${mood.label}${student.leader ? "、リーダー" : ""}`);
+        button.setAttribute("aria-label", `${student.name}、${student.element}、${student.species}、${mood.label}`);
         button.title = mood.label;
-        button.innerHTML = `<span class="student-copy"><span class="student-primary"><span class="student-face" aria-hidden="true">${mood.face}</span><span class="student-name">${student.name}</span></span><span class="student-traits">${traitLabel(student)}</span></span>${student.leader ? '<span class="leader-mark" aria-label="リーダー">★</span>' : ""}`;
+        button.innerHTML = `<span class="student-copy"><span class="student-primary"><span class="student-face" aria-hidden="true">${mood.face}</span><span class="student-name">${student.name}</span></span><span class="student-traits">${traitLabel(student)}</span></span>`;
         button.addEventListener("click", () => { selectedStudent = selectedStudent === student.id ? null : student.id; render(); });
         button.addEventListener("dragstart", event => event.dataTransfer.setData("text/plain", student.id));
         rosterElement.append(button);
       });
     }
-    function renderMission() {
-      const level = currentLevel();
-      const checks = level.rules.map(evaluateRule);
-      const remaining = checks.filter(check => !check.ok).length;
-      document.getElementById("story").textContent = level.story;
-      document.getElementById("ruleCount").textContent = `${level.rules.length}つの条件`;
-      document.getElementById("rosterCount").textContent = `${students.length}人`;
-      const summary = document.getElementById("conditionSummary");
-      summary.textContent = remaining ? `${remaining}件未達` : "ぜんぶOK";
-      summary.classList.toggle("all-clear", remaining === 0);
-      rulesElement.innerHTML = "";
-      level.rules.forEach((rule, index) => {
-        const item = document.createElement("li");
-        item.className = "rule";
-        const check = checks[index];
-        item.innerHTML = `<span class="rule-icon" aria-hidden="true">${rule.icon}</span><span><strong>${rule.title}</strong>${rule.text}<span class="rule-status${check.ok ? " ok" : ""}" id="ruleStatus${index}"><i class="status-dot"></i>${check.ok ? "クリア" : "まだ"}</span></span>`;
-        rulesElement.append(item);
-      });
-    }
     function groupAt(seatIndex) { return Math.floor(seatIndex / 4); }
     function findSeat(studentId) { return seats.indexOf(studentId); }
-    function classroomCoordinates(seatIndex) {
-      const groupIndex = groupAt(seatIndex);
-      const chair = seatIndex % 4;
-      return {
-        row: Math.floor(groupIndex / 3) * 2 + Math.floor(chair / 2),
-        column: (groupIndex % 3) * 2 + chair % 2
-      };
-    }
-    function areAdjacent(firstSeat, secondSeat) {
-      const first = classroomCoordinates(firstSeat);
-      const second = classroomCoordinates(secondSeat);
-      const rowDistance = Math.abs(first.row - second.row);
-      const columnDistance = Math.abs(first.column - second.column);
-      return rowDistance + columnDistance === 1;
-    }
-    function evaluateRule(rule) {
-      if (rule.type === "leaderSpread") {
-        const onePerGroup = currentLevel().teams.every((_, groupIndex) => seats.slice(groupIndex * 4, groupIndex * 4 + 4).filter(id => studentById(id).leader).length === 1);
-        return { ok: onePerGroup, hint: "各班の★が1人ずつになるように席を入れかえてみよう。" };
-      }
-      const [firstId, secondId] = rule.people.map(name => students.find(student => student.name === name).id);
-      const [firstStudent, secondStudent] = [studentById(firstId), studentById(secondId)];
-      const firstSeat = findSeat(firstId);
-      const secondSeat = findSeat(secondId);
-      const sameGroup = groupAt(firstSeat) === groupAt(secondSeat);
-      const adjacent = areAdjacent(firstSeat, secondSeat);
-      const affinity = compatibilityScore(firstStudent, secondStudent);
-      const ok = rule.type === "same" ? sameGroup : rule.type === "different" ? !sameGroup
-        : rule.type === "adjacent" ? adjacent : rule.type === "notAdjacent" ? !adjacent
-        : rule.type === "goodAffinity" ? affinity > 0 && sameGroup
-        : rule.type === "carefulAffinity" ? affinity < 0 && !sameGroup
-        : false;
-      const hints = {
-        same: `${rule.people.join("さんと")}さんを同じ班にしよう。`,
-        different: `${rule.people.join("さんと")}さんが別の班になる席を考えよう。`,
-        adjacent: `${rule.people.join("さんと")}さんを同じ班のとなり同士にしよう。`,
-        notAdjacent: `${rule.people.join("さんと")}さんがとなり同士にならないようにしよう。`,
-        goodAffinity: `${rule.people.join("さんと")}さんは相性ぴったり。属性・種族の相性も見て、同じ班にしよう。`,
-        carefulAffinity: `${rule.people.join("さんと")}さんは相性に工夫が必要。ちがう班にしてみよう。`
-      };
-      return { ok, hint: hints[rule.type] };
-    }
     function handleSeatClick(seatIndex) {
       const occupant = seats[seatIndex];
       if (!selectedStudent) { selectedStudent = occupant; render(); return; }
@@ -907,54 +627,6 @@
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
     }
-    function checkArrangement(showSuccess = true) {
-      const results = currentLevel().rules.map(evaluateRule);
-      results.forEach((result, index) => {
-        const status = document.getElementById(`ruleStatus${index}`);
-        status.classList.toggle("ok", result.ok);
-        status.lastChild.textContent = result.ok ? "クリア" : "まだ";
-      });
-      const remaining = results.filter(result => !result.ok);
-      if (remaining.length) {
-        resultElement.textContent = `${remaining.length}つの条件がまだだよ。ヒントを見ながら考えてみよう。`;
-        resultElement.className = "check-result";
-        if (showSuccess) showToast(`${remaining.length}つの条件をもう少し！`);
-        return false;
-      }
-      if (!customLevel) completedLevels.add(levelIndex);
-      renderLevelButtons();
-      resultElement.textContent = "ぜんぶの条件クリア！みんなが過ごしやすい席になったね。";
-      resultElement.className = "check-result success";
-      if (showSuccess) openSuccessDialog();
-      return true;
-    }
-    function openSuccessDialog() {
-      const isCustom = customLevel !== null;
-      const isLast = levelIndex === levels.length - 1;
-      document.getElementById("dialogTitle").textContent = isCustom ? "チャレンジ成功！" : "ミッション成功！";
-      document.getElementById("dialogText").textContent = isCustom
-        ? `「${currentLevel().name}」をクリア！つくった条件をぜんぶ達成したよ。`
-        : isLast ? "インフェルノまでクリア！みんなの気持ちを考えた席替え、大成功！" : `${currentLevel().name}をクリア！それぞれが安心してすごせる教室になったよ。`;
-      document.getElementById("dialogNext").textContent = isCustom ? "メーカーへもどる" : isLast ? "もう一度あそぶ" : "つぎの難易度へ";
-      document.getElementById("dialogNext").onclick = () => {
-        overlay.classList.remove("open");
-        if (isCustom) {
-          gameMode = "maker";
-          startLevel(levelIndex);
-          return;
-        }
-        gameMode = "play";
-        startLevel(isLast ? 0 : levelIndex + 1);
-      };
-      overlay.classList.add("open");
-      document.getElementById("dialogNext").focus();
-    }
-    document.getElementById("checkButton").addEventListener("click", () => checkArrangement());
-    document.getElementById("hintButton").addEventListener("click", () => {
-      const firstUnmet = currentLevel().rules.map(rule => evaluateRule(rule)).find(result => !result.ok);
-      if (!firstUnmet) { showToast("ぜんぶクリア！チェックボタンをおしてね。"); return; }
-      showToast(firstUnmet.hint);
-    });
     document.getElementById("playModeButton").addEventListener("click", enterPlay);
     document.getElementById("makerModeButton").addEventListener("click", enterMaker);
     document.getElementById("makerName").addEventListener("input", event => { if (makerDraft) makerDraft.name = event.target.value; });
@@ -966,25 +638,11 @@
       render();
     });
     document.getElementById("makerTeamCount").addEventListener("change", event => resizeMakerDraft(Number(event.target.value)));
-    document.getElementById("makerNewRuleType").addEventListener("change", updateNewRulePeopleVisibility);
-    document.getElementById("addRuleButton").addEventListener("click", () => {
-      const type = document.getElementById("makerNewRuleType").value;
-      const people = type === "leaderSpread" ? [] : [document.getElementById("makerPersonA").value, document.getElementById("makerPersonB").value];
-      if (type !== "leaderSpread" && (!people[0] || !people[1] || people[0] === people[1])) {
-        showToast("条件にはちがう生徒を2人えらんでください。");
-        return;
-      }
-      makerDraft.rules.push(makerRule(type, people));
-      renderMaker();
-    });
     document.getElementById("playCustomButton").addEventListener("click", playMakerDraft);
     document.getElementById("resetButton").addEventListener("click", () => startLevel(levelIndex, customLevel));
-    document.getElementById("helpButton").addEventListener("click", () => showToast("人をえらんで席をおすと交代。条件をぜんぶクリアしたら「できたかチェック」！"));
-    document.getElementById("dialogClose").addEventListener("click", () => overlay.classList.remove("open"));
-    overlay.addEventListener("click", event => { if (event.target === overlay) overlay.classList.remove("open"); });
+    document.getElementById("helpButton").addEventListener("click", () => showToast("⭕️は班に相性注意の相手なし、❌は相性注意の相手あり。相性表は「それぞれの相性」で確認できます。"));
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") { selectedStudent = null; overlay.classList.remove("open"); render(); }
-      if (event.key === "Enter" && !overlay.classList.contains("open") && event.target.tagName !== "BUTTON") checkArrangement();
+      if (event.key === "Escape") { selectedStudent = null; render(); }
     });
     startLevel(0);
   </script>
