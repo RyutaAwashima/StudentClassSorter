@@ -260,21 +260,19 @@
   <script>
     const elementTypes = [
       { name: "炎", icon: "🔥", good: ["風", "闇"], careful: ["水", "光"] },
-      { name: "水", icon: "💧", good: ["岩", "光"], careful: ["炎", "雷"] },
-      { name: "岩", icon: "🪨", good: ["水", "雷"], careful: ["風", "闇"] },
-      { name: "風", icon: "🍃", good: ["炎", "雷"], careful: ["岩", "光"] },
-      { name: "雷", icon: "⚡", good: ["岩", "風"], careful: ["水", "闇"] },
-      { name: "闇", icon: "🌙", good: ["炎", "光"], careful: ["岩", "雷"] },
+      { name: "水", icon: "💧", good: ["岩", "光"], careful: ["炎"] },
+      { name: "岩", icon: "🪨", good: ["水"], careful: ["風", "闇"] },
+      { name: "風", icon: "🍃", good: ["炎"], careful: ["岩", "光"] },
+      { name: "闇", icon: "🌙", good: ["炎", "光"], careful: ["岩"] },
       { name: "光", icon: "✨", good: ["水", "闇"], careful: ["炎", "風"] }
     ];
     const speciesTypes = [
       { name: "人間", icon: "🧑", good: ["けもの", "妖精"], careful: ["ドラゴン", "天使"] },
-      { name: "けもの", icon: "🐾", good: ["人間", "ドラゴン"], careful: ["巨人", "魔族"] },
-      { name: "ドラゴン", icon: "🐉", good: ["けもの", "巨人"], careful: ["人間", "魔族"] },
-      { name: "妖精", icon: "🧚", good: ["人間", "天使"], careful: ["けもの", "魔族"] },
-      { name: "巨人", icon: "🗿", good: ["ドラゴン", "魔族"], careful: ["けもの", "天使"] },
-      { name: "魔族", icon: "👿", good: ["巨人", "天使"], careful: ["けもの", "ドラゴン", "妖精"] },
-      { name: "天使", icon: "👼", good: ["妖精", "魔族"], careful: ["人間", "巨人"] }
+      { name: "けもの", icon: "🐾", good: ["人間", "ドラゴン"], careful: ["巨人"] },
+      { name: "ドラゴン", icon: "🐉", good: ["けもの", "巨人"], careful: ["人間"] },
+      { name: "妖精", icon: "🧚", good: ["人間", "天使"], careful: ["けもの"] },
+      { name: "巨人", icon: "🗿", good: ["ドラゴン"], careful: ["けもの", "天使"] },
+      { name: "天使", icon: "👼", good: ["妖精"], careful: ["人間", "巨人"] }
     ];
 
     const levels = [
