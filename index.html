@@ -560,6 +560,16 @@
             : rule);
           renderMaker();
         });
+        const elementSelect = document.createElement("select");
+        elementSelect.className = "maker-profile-select";
+        elementSelect.setAttribute("aria-label", `${student.name}の属性`);
+        addProfileOptions(elementSelect, elementTypes, student.element);
+        elementSelect.addEventListener("change", () => { student.element = elementSelect.value; });
+        const speciesSelect = document.createElement("select");
+        speciesSelect.className = "maker-profile-select";
+        speciesSelect.setAttribute("aria-label", `${student.name}の種族`);
+        addProfileOptions(speciesSelect, speciesTypes, student.species);
+        speciesSelect.addEventListener("change", () => { student.species = speciesSelect.value; });
         const leaderLabel = document.createElement("label");
         leaderLabel.className = "leader-toggle";
         const leaderCheck = document.createElement("input");
@@ -568,7 +578,7 @@
         leaderCheck.setAttribute("aria-label", `${student.name}をリーダーにする`);
         leaderCheck.addEventListener("change", () => { student.leader = leaderCheck.checked; });
         leaderLabel.append(leaderCheck, document.createTextNode("★ リーダー"));
-        row.append(nameInput, leaderLabel);
+        row.append(nameInput, elementSelect, speciesSelect, leaderLabel);
         roster.append(row);
       });
       renderMakerRules();
@@ -626,7 +636,7 @@
       });
     }
     function addRuleTypeOptions(select, selected) {
-      const options = [["same", "同じ班にする"], ["different", "別の班にする"], ["adjacent", "となり同士にする"], ["notAdjacent", "となりをさける"], ["leaderSpread", "リーダーを各班に分ける"]];
+      const options = [["same", "同じ班にする"], ["different", "別の班にする"], ["adjacent", "となり同士にする"], ["notAdjacent", "となりをさける"], ["leaderSpread", "リーダーを各班に分ける"], ["goodAffinity", "相性のよい2人を同じ班に"], ["carefulAffinity", "相性注意の2人を別の班に"]];
       options.forEach(([value, label]) => {
         const option = document.createElement("option");
         option.value = value;
@@ -641,6 +651,15 @@
         option.value = student.name;
         option.textContent = student.name;
         option.selected = student.name === selected;
+        select.append(option);
+      });
+    }
+    function addProfileOptions(select, types, selected) {
+      types.forEach(type => {
+        const option = document.createElement("option");
+        option.value = type.name;
+        option.textContent = `${type.icon} ${type.name}`;
+        option.selected = type.name === selected;
         select.append(option);
       });
     }
@@ -709,12 +728,23 @@
         showToast("リーダー分散の条件には、班と同じ人数のリーダーが必要です。");
         return;
       }
+      const profilesByName = new Map(makerDraft.students.map(student => [student.name, student]));
+      const invalidAffinityRule = makerDraft.rules.find(rule => {
+        if (rule.type !== "goodAffinity" && rule.type !== "carefulAffinity") return false;
+        const score = compatibilityScore(profilesByName.get(rule.people[0]), profilesByName.get(rule.people[1]));
+        return rule.type === "goodAffinity" ? score <= 0 : score >= 0;
+      });
+      if (invalidAffinityRule) {
+        showToast("相性条件に合う属性・種族のペアを選んでください。");
+        return;
+      }
       const teams = Array.from({ length: makerDraft.groupCount }, (_, groupIndex) => names.slice(groupIndex * 4, groupIndex * 4 + 4));
       customLevel = {
         name: makerDraft.name.trim(),
         story: "オリジナルの条件にチャレンジ！みんなが安心できる席を考えよう。",
         teams,
         leaders: makerDraft.students.filter(student => student.leader).map(student => student.name),
+        studentProfiles: makerDraft.students.map(({ name, element, species }) => ({ name, element, species })),
         rules: makerDraft.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
       };
       gameMode = "play";
@@ -755,8 +785,8 @@
           const button = document.createElement("button");
           button.type = "button";
           button.className = `seat${student.leader ? " leader" : ""}${selectedStudent === student.id ? " selected" : ""}`;
-          button.setAttribute("aria-label", `${groupIndex + 1}班、${chairName(chair)}、${student.name}、${mood.label}${student.leader ? "、リーダー" : ""}`);
-          button.innerHTML = `<span class="seat-person"><span class="seat-face" aria-hidden="true">${mood.face}</span><span class="seat-name">${student.name}</span></span><span class="seat-caption">${chairName(chair)}</span>`;
+          button.setAttribute("aria-label", `${groupIndex + 1}班、${chairName(chair)}、${student.name}、${student.element}、${student.species}、${mood.label}${student.leader ? "、リーダー" : ""}`);
+          button.innerHTML = `<span class="seat-person"><span class="seat-face" aria-hidden="true">${mood.face}</span><span class="seat-name">${student.name}</span></span><span class="seat-traits">${traitLabel(student)}</span><span class="seat-caption">${chairName(chair)}</span>`;
           button.addEventListener("click", () => handleSeatClick(seatIndex));
           button.addEventListener("dragover", event => { event.preventDefault(); button.classList.add("drop-target"); });
           button.addEventListener("dragleave", () => button.classList.remove("drop-target"));
@@ -773,6 +803,11 @@
       });
     }
     function chairName(index) { return ["まえ・左", "まえ・右", "うしろ・左", "うしろ・右"][index]; }
+    function traitLabel(student) {
+      const element = elementTypes.find(type => type.name === student.element);
+      const species = speciesTypes.find(type => type.name === student.species);
+      return `${element.icon} ${element.name} · ${species.icon} ${species.name}`;
+    }
     function renderRoster() {
       rosterElement.innerHTML = "";
       students.forEach(student => {
@@ -784,7 +819,7 @@
         const mood = studentMood(student);
         button.setAttribute("aria-label", `${student.name}、${mood.label}${student.leader ? "、リーダー" : ""}`);
         button.title = mood.label;
-        button.innerHTML = `<span class="seat-person"><span class="student-face" aria-hidden="true">${mood.face}</span><span class="student-name">${student.name}</span></span>${student.leader ? '<span class="leader-mark" aria-label="リーダー">★</span>' : ""}`;
+        button.innerHTML = `<span class="student-copy"><span class="student-primary"><span class="student-face" aria-hidden="true">${mood.face}</span><span class="student-name">${student.name}</span></span><span class="student-traits">${traitLabel(student)}</span></span>${student.leader ? '<span class="leader-mark" aria-label="リーダー">★</span>' : ""}`;
         button.addEventListener("click", () => { selectedStudent = selectedStudent === student.id ? null : student.id; render(); });
         button.addEventListener("dragstart", event => event.dataTransfer.setData("text/plain", student.id));
         rosterElement.append(button);
@@ -832,16 +867,24 @@
         return { ok: onePerGroup, hint: "各班の★が1人ずつになるように席を入れかえてみよう。" };
       }
       const [firstId, secondId] = rule.people.map(name => students.find(student => student.name === name).id);
+      const [firstStudent, secondStudent] = [studentById(firstId), studentById(secondId)];
       const firstSeat = findSeat(firstId);
       const secondSeat = findSeat(secondId);
       const sameGroup = groupAt(firstSeat) === groupAt(secondSeat);
       const adjacent = areAdjacent(firstSeat, secondSeat);
-      const ok = rule.type === "same" ? sameGroup : rule.type === "different" ? !sameGroup : rule.type === "adjacent" ? adjacent : rule.type === "notAdjacent" ? !adjacent : false;
+      const affinity = compatibilityScore(firstStudent, secondStudent);
+      const ok = rule.type === "same" ? sameGroup : rule.type === "different" ? !sameGroup
+        : rule.type === "adjacent" ? adjacent : rule.type === "notAdjacent" ? !adjacent
+        : rule.type === "goodAffinity" ? affinity > 0 && sameGroup
+        : rule.type === "carefulAffinity" ? affinity < 0 && !sameGroup
+        : false;
       const hints = {
         same: `${rule.people.join("さんと")}さんを同じ班にしよう。`,
         different: `${rule.people.join("さんと")}さんが別の班になる席を考えよう。`,
         adjacent: `${rule.people.join("さんと")}さんを同じ班のとなり同士にしよう。`,
-        notAdjacent: `${rule.people.join("さんと")}さんがとなり同士にならないようにしよう。`
+        notAdjacent: `${rule.people.join("さんと")}さんがとなり同士にならないようにしよう。`,
+        goodAffinity: `${rule.people.join("さんと")}さんは相性ぴったり。属性・種族の相性も見て、同じ班にしよう。`,
+        carefulAffinity: `${rule.people.join("さんと")}さんは相性に工夫が必要。ちがう班にしてみよう。`
       };
       return { ok, hint: hints[rule.type] };
     }
