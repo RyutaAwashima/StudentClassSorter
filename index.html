@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2e8">
+  <title>席替えシミュレーター</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #203638;
+      --muted: #687a78;
+      --paper: #f4f2e8;
+      --white: #fffef9;
+      --green: #3d796b;
+      --green-dark: #28584e;
+      --mint: #dcece3;
+      --line: #d9ddd1;
+      --shadow: 0 8px 24px rgb(47 63 55 / 8%);
+      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; min-height: 100vh; background-color: var(--paper); background-image: radial-gradient(#d7dccc 0.7px, transparent 0.7px); background-size: 18px 18px; }
+    button { font: inherit; }
+    button:focus-visible { outline: 3px solid #df9650; outline-offset: 3px; }
+    .app { width: min(1440px, 100%); margin: 0 auto; padding: 24px 28px 44px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; color: #fff; background: var(--green); font-size: 24px; box-shadow: 0 4px 0 var(--green-dark); }
+    .brand h1 { margin: 0; font-size: 21px; line-height: 1.3; font-weight: 800; }
+    .brand p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .top-actions { display: flex; gap: 8px; }
+    .mode-switch { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: #e9eade; }
+    .mode-button { min-height: 34px; border: 0; border-radius: 8px; padding: 0 12px; color: #526563; background: transparent; cursor: pointer; font-size: 12px; font-weight: 800; }
+    .mode-button[aria-pressed="true"] { color: #fff; background: var(--green); box-shadow: 0 2px 5px rgb(32 54 56 / 15%); }
+    .quiet-button, .primary-button { min-height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 13px; color: var(--ink); background: var(--white); cursor: pointer; transition: transform .15s, box-shadow .15s; }
+    .quiet-button:hover, .primary-button:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgb(47 63 55 / 10%); }
+    .primary-button { border-color: var(--green); color: #fff; background: var(--green); font-weight: 800; }
+    .primary-button:hover { background: var(--green-dark); }
+    .level-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .level-label { margin-right: 6px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .level-button { min-height: 36px; border: 1px solid #d4d9ce; border-radius: 9px; padding: 0 13px; color: #526563; background: #fbfaf5; cursor: pointer; font-size: 13px; font-weight: 700; }
+    .level-button[aria-current="true"] { border-color: var(--ink); color: #fff; background: var(--ink); }
+    .level-button.completed::after { content: "✓"; margin-left: 7px; color: #f0c65b; }
+    .maker-view { margin-bottom: 18px; border: 1px solid #e1e0d5; border-radius: 14px; padding: 20px; background: rgb(255 254 249 / 96%); box-shadow: var(--shadow); }
+    .maker-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+    .maker-heading h2 { margin: 0; font-size: 18px; }
+    .maker-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .maker-fields { display: grid; grid-template-columns: minmax(190px, 1.4fr) repeat(2, minmax(145px, .7fr)); gap: 12px; margin-bottom: 17px; }
+    .maker-field { display: grid; gap: 6px; color: #5e706d; font-size: 11px; font-weight: 800; }
+    .maker-field input, .maker-field select, .maker-rule-row select, .maker-student input[type="text"] { width: 100%; min-width: 0; min-height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; color: var(--ink); background: #fff; font: inherit; }
+    .maker-section { border-top: 1px solid #e6e6dc; padding-top: 15px; margin-top: 15px; }
+    .maker-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+    .maker-section-heading h3 { margin: 0; font-size: 14px; }
+    .maker-section-heading p { margin: 0; color: var(--muted); font-size: 10px; }
+    .maker-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 7px; }
+    .maker-student { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 9px; min-height: 44px; border: 1px solid #e4e5dc; border-radius: 8px; padding: 4px 8px; background: #fffefa; }
+    .maker-student input[type="text"] { min-height: 32px; padding: 0 7px; font-size: 11px; }
+    .leader-toggle { display: inline-flex; align-items: center; gap: 4px; color: #986a2e; white-space: nowrap; font-size: 10px; font-weight: 800; }
+    .leader-toggle input { accent-color: #ba8437; }
+    .maker-rules { display: grid; gap: 7px; }
+    .maker-rule-row { display: grid; grid-template-columns: minmax(130px, .85fr) minmax(100px, 1fr) minmax(100px, 1fr) 36px; align-items: center; gap: 7px; }
+    .maker-rule-row select { min-height: 36px; padding: 0 7px; font-size: 11px; }
+    .maker-rule-row select:disabled { opacity: .45; }
+    .remove-rule { width: 36px; height: 36px; border: 1px solid #e6d5cf; border-radius: 8px; color: #a35142; background: #fff8f4; cursor: pointer; font-size: 17px; }
+    .maker-add-rule { display: grid; grid-template-columns: minmax(140px, .9fr) minmax(100px, 1fr) minmax(100px, 1fr) auto; gap: 7px; margin-top: 10px; }
+    .maker-add-rule select { min-height: 40px; border: 1px solid var(--line); border-radius: 8px; padding: 0 8px; color: var(--ink); background: #fff; font: inherit; font-size: 11px; }
+    .maker-add-rule .primary-button { min-height: 40px; padding: 0 11px; font-size: 11px; }
+    .maker-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 17px; border-top: 1px solid #e6e6dc; padding-top: 15px; }
+    .maker-note { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    [hidden] { display: none !important; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+    .room-panel, .mission-panel, .roster-panel { border: 1px solid #e1e0d5; border-radius: 14px; background: rgb(255 254 249 / 94%); box-shadow: var(--shadow); }
+    .room-panel { position: sticky; top: 12px; min-width: 0; padding: 20px; }
+    .control-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .room-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 13px; }
+    .eyebrow { margin: 0 0 5px; color: var(--green); font-size: 11px; font-weight: 900; }
+    .room-heading h2 { margin: 0; font-size: 18px; }
+    .room-meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .classroom-scroll { width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-color: #9aad9f #edf0e8; scrollbar-width: thin; }
+    .classroom-canvas { min-width: 720px; }
+    .room-directions { display: grid; grid-template-columns: 66px minmax(0, 1fr) 66px; align-items: center; gap: 10px; margin-bottom: 12px; color: #687a78; font-size: 10px; font-weight: 800; }
+    .room-directions span:first-child { color: #64859a; }
+    .room-directions span:last-child { color: #9b7851; text-align: right; }
+    .blackboard { display: grid; place-items: center; min-height: 39px; width: min(100%, 410px); justify-self: center; border: 5px solid #b98959; border-radius: 5px; color: #eff3dc; background: #315e50; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+    .pods { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 8px; align-items: start; }
+    .pod { grid-column: span 2; }
+    .pod { min-width: 0; padding: 10px; border: 1px solid #e3e2d9; border-radius: 10px; background: #f7f6ef; }
+    .pod-title { display: flex; justify-content: space-between; align-items: center; margin: 0 2px 8px; color: #657673; font-size: 11px; font-weight: 800; }
+    .pod-title span:last-child { color: #9a9f91; font-weight: 600; }
+    .pod-seats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+    .seat { min-width: 0; min-height: 69px; border: 1px solid #d5dfd7; border-radius: 8px; padding: 8px 5px 5px; color: var(--ink); background: #fff; cursor: pointer; text-align: center; box-shadow: 0 2px 0 #dbe5dd; transition: border-color .14s, background .14s, transform .14s; }
+    .seat:hover { transform: translateY(-1px); border-color: #86ae9a; }
+    .seat.selected { border: 2px solid #d28a36; padding: 7px 4px 4px; background: #fff6dc; }
+    .seat.drop-target { background: #e8f3e8; }
+    .seat-person { display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 0; }
+    .seat-face { flex: none; font-size: 17px; line-height: 1; }
+    .seat-name { display: block; overflow: hidden; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .seat-caption { display: block; margin-top: 4px; color: #82918b; font-size: 9px; }
+    .seat.leader .seat-name::after { content: " ★"; color: #d28a36; }
+    .room-footnote { margin: 13px 1px 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .mission-panel { min-width: 0; overflow: hidden; }
+    .fold-summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 58px; padding: 12px 16px; cursor: pointer; list-style: none; }
+    .fold-summary::-webkit-details-marker { display: none; }
+    .fold-summary::after { content: "+"; display: grid; place-items: center; flex: none; width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 8px; color: var(--green-dark); font-size: 19px; font-weight: 500; }
+    details[open] > .fold-summary::after { content: "−"; }
+    .fold-heading { font-size: 15px; font-weight: 800; }
+    .fold-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .fold-count { border-radius: 20px; padding: 4px 8px; color: var(--green-dark); background: var(--mint); font-size: 10px; font-weight: 800; white-space: nowrap; }
+    .fold-status { color: #9a6439; font-size: 10px; font-weight: 800; white-space: nowrap; }
+    .fold-status.all-clear { color: #397861; }
+    .fold-content { padding: 0 16px 16px; }
+    .rule-count { border-radius: 20px; padding: 4px 8px; color: var(--green-dark); background: var(--mint); font-size: 10px; font-weight: 800; white-space: nowrap; }
+    .story { margin: 10px 0 15px; color: #5e706d; font-size: 12px; line-height: 1.75; }
+    .rules { display: grid; gap: 9px; list-style: none; margin: 0; padding: 0; }
+    .rule { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; align-items: start; border: 1px solid #e8e8df; border-radius: 9px; padding: 9px; background: #fffefa; font-size: 11px; line-height: 1.65; }
+    .rule-icon { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 7px; background: #edf4e9; font-size: 14px; }
+    .rule strong { display: block; margin-bottom: 2px; font-size: 11px; }
+    .rule-status { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: #a06539; font-size: 10px; font-weight: 800; }
+    .rule-status.ok { color: #397861; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #dc8d50; }
+    .rule-status.ok .status-dot { background: #55a477; }
+    .mission-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 15px; }
+    .mission-actions button { min-height: 42px; }
+    .check-result { min-height: 18px; margin: 9px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .check-result.success { color: #34745a; font-weight: 800; }
+    .roster-panel { min-width: 0; overflow: hidden; }
+    .roster-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 11px; }
+    .roster-heading p { margin: 0; color: var(--muted); font-size: 10px; }
+    .roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 7px; }
+    .student { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-height: 40px; border: 1px solid #e0e4d9; border-radius: 8px; padding: 0 8px; color: #40524e; background: #fff; cursor: grab; font-size: 11px; font-weight: 700; transition: background .14s, border .14s; }
+    .student:hover { border-color: #91b4a0; background: #f1f7ef; }
+    .student.selected { border: 2px solid #d28a36; padding: 0 7px; background: #fff6dc; }
+    .student:active { cursor: grabbing; }
+    .student-face { flex: none; font-size: 17px; line-height: 1; }
+    .student-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .student .leader-mark { color: #d28a36; font-size: 10px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; color: var(--muted); font-size: 10px; }
+    .legend span { display: inline-flex; align-items: center; gap: 4px; }
+    .legend-star { color: #d28a36; }
+    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 5; max-width: min(380px, calc(100vw - 40px)); border-radius: 10px; padding: 12px 16px; color: #fff; background: var(--ink); box-shadow: var(--shadow); font-size: 13px; line-height: 1.5; opacity: 0; transform: translateY(10px); pointer-events: none; transition: .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .overlay { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgb(24 42 39 / 48%); opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+    .dialog { width: min(420px, 100%); border: 1px solid #e1e0d5; border-radius: 16px; padding: 25px; background: var(--white); box-shadow: 0 16px 48px rgb(0 0 0 / 20%); text-align: center; transform: translateY(8px); transition: transform .2s; }
+    .overlay.open .dialog { transform: translateY(0); }
+    .dialog-stamp { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 12px; border-radius: 50%; color: #fff; background: var(--green); font-size: 28px; }
+    .dialog h2 { margin: 0 0 7px; font-size: 21px; }
+    .dialog p { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .dialog .primary-button { min-width: 150px; }
+    .dialog-close { display: block; margin: 10px auto 0; border: 0; padding: 7px 12px; color: var(--muted); background: transparent; cursor: pointer; font-size: 11px; }
+    .confetti { animation: pop .45s ease-out both; }
+    @keyframes pop { from { opacity: 0; transform: scale(.55) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+    @media (max-width: 960px) {
+      .app { padding-right: 18px; padding-left: 18px; }
+      .maker-fields { grid-template-columns: minmax(160px, 1.2fr) repeat(2, minmax(125px, .8fr)); }
+      .workspace { gap: 12px; }
+      .room-panel { padding: 15px; }
+      .pods { gap: 9px; }
+      .pod { padding: 8px; }
+      .seat { min-height: 64px; }
+    }
+    @media (max-width: 720px) {
+      .app { padding: 16px 12px 30px; }
+      .topbar { align-items: flex-start; margin-bottom: 17px; }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand h1 { font-size: 17px; }
+      .brand p { font-size: 10px; }
+      .top-actions .quiet-button { min-height: 36px; padding: 0 9px; font-size: 11px; }
+      .topbar { flex-wrap: wrap; }
+      .mode-button { padding: 0 9px; font-size: 11px; }
+      .maker-view { padding: 14px; }
+      .maker-fields { grid-template-columns: 1fr 1fr; }
+      .maker-field:first-child { grid-column: 1 / -1; }
+      .maker-roster { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .maker-rule-row { grid-template-columns: minmax(110px, 1fr) minmax(95px, 1fr) minmax(95px, 1fr) 36px; gap: 5px; }
+      .maker-add-rule { grid-template-columns: 1fr 1fr; }
+      .maker-add-rule .primary-button { min-height: 38px; }
+      .level-bar { gap: 6px; }
+      .level-label { width: 100%; }
+      .level-button { flex: 1; min-width: 54px; padding: 0 7px; font-size: 11px; }
+      .workspace { grid-template-columns: 1fr; }
+      .control-panels { grid-template-columns: 1fr; }
+      .room-panel { position: static; grid-row: 1; padding: 13px; }
+      .fold-summary { min-height: 52px; padding: 10px 13px; }
+      .fold-content { padding: 0 13px 13px; }
+      .rules { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+      .story { margin-bottom: 10px; }
+      .mission-actions { margin-top: 10px; }
+      .roster-panel { margin-top: 0; }
+      .roster { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
+      .student { min-height: 34px; font-size: 10px; }
+      .pods { gap: 8px; }
+      .pod { padding: 6px; }
+      .pod-title { font-size: 10px; }
+      .pod-seats { gap: 5px; }
+      .seat { min-height: 59px; padding: 6px 3px 4px; }
+      .seat-name { font-size: 10px; }
+      .seat-caption { font-size: 8px; }
+      .blackboard { margin-bottom: 13px; }
+    }
+    @media (max-width: 380px) {
+      .pod { padding: 8px; }
+      .maker-rule-row { grid-template-columns: minmax(0, 1fr) 36px; }
+      .maker-rule-row select { grid-column: 1 / -1; }
+      .maker-rule-row .remove-rule { grid-column: 2; }
+      .maker-add-rule .primary-button { grid-column: 1 / -1; }
+      .seat { min-height: 58px; }
+      .room-heading h2 { font-size: 16px; }
+      .room-meta { font-size: 10px; }
+      .top-actions .quiet-button:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">席</div>
+        <div><h1>席替えシミュレーター</h1><p>みんなが安心してすごせる教室をつくろう</p></div>
+      </div>
+      <div class="top-actions">
+        <div class="mode-switch" role="group" aria-label="ゲームモード">
+          <button class="mode-button" id="playModeButton" type="button" aria-pressed="true">あそぶ</button>
+          <button class="mode-button" id="makerModeButton" type="button" aria-pressed="false">つくる</button>
+        </div>
+        <button class="quiet-button" id="resetButton" type="button" title="今の難易度をはじめからやり直す">↻ やり直す</button>
+        <button class="quiet-button" id="helpButton" type="button">あそびかた</button>
+      </div>
+    </header>
+    <nav class="level-bar" id="difficultyNav" aria-label="難易度">
+      <span class="level-label">チャレンジをえらぶ</span>
+      <div id="levelButtons" class="level-bar" style="margin:0"></div>
+    </nav>
+    <main>
+      <section class="maker-view" id="makerView" aria-labelledby="makerTitle" hidden>
+        <div class="maker-heading">
+          <div><p class="eyebrow">CHALLENGE BUILDER</p><h2 id="makerTitle">オリジナルの席替えをつくる</h2><p>生徒や条件を決めたら、席順画面で実際にチャレンジできます。</p></div>
+        </div>
+        <div class="maker-fields">
+          <label class="maker-field">チャレンジ名<input id="makerName" type="text" maxlength="28" value="マイチャレンジ" autocomplete="off"></label>
+          <label class="maker-field">お手本にするクラス<select id="makerTemplate"><option value="0">イージー</option><option value="1">ノーマル</option><option value="2">ハード</option><option value="3">エクストラ</option><option value="4">インフェルノ</option></select></label>
+          <label class="maker-field">班の数<select id="makerTeamCount"><option value="2">2班</option><option value="3">3班</option><option value="4">4班</option><option value="5">5班</option><option value="6">6班</option><option value="7">7班</option></select></label>
+        </div>
+        <section class="maker-section" aria-labelledby="makerRosterTitle">
+          <div class="maker-section-heading"><h3 id="makerRosterTitle">生徒とリーダー</h3><p>名前を編集し、リーダー役にチェックを入れます</p></div>
+          <div class="maker-roster" id="makerRoster"></div>
+        </section>
+        <section class="maker-section" aria-labelledby="makerRulesTitle">
+          <div class="maker-section-heading"><h3 id="makerRulesTitle">席替えの条件</h3><p>同じ班・別の班・となり・リーダー分散から選べます</p></div>
+          <div class="maker-rules" id="makerRules"></div>
+          <div class="maker-add-rule">
+            <select id="makerNewRuleType" aria-label="追加する条件">
+              <option value="same">同じ班にする</option><option value="different">別の班にする</option><option value="adjacent">となり同士にする</option><option value="notAdjacent">となりをさける</option><option value="leaderSpread">リーダーを各班に分ける</option>
+            </select>
+            <select id="makerPersonA" aria-label="生徒1"></select>
+            <select id="makerPersonB" aria-label="生徒2"></select>
+            <button class="primary-button" id="addRuleButton" type="button">＋ 条件を追加</button>
+          </div>
+        </section>
+        <div class="maker-footer">
+          <p class="maker-note">1班は4人です。リーダー分散を使うときは、リーダーの人数と班数をそろえてください。</p>
+          <button class="primary-button" id="playCustomButton" type="button">この条件であそぶ</button>
+        </div>
+      </section>
+      <div class="workspace" id="playView">
+        <section class="room-panel" aria-labelledby="roomTitle">
+          <div class="room-heading"><div><p class="eyebrow">CLASSROOM / まえ</p><h2 id="roomTitle">教室の席</h2></div><span class="room-meta" id="roomMeta"></span></div>
+          <div class="classroom-scroll" tabindex="0" aria-label="教室全体、窓側から廊下側">
+            <div class="classroom-canvas">
+              <div class="room-directions"><span>窓側</span><div class="blackboard" aria-label="教室の前">黒 板</div><span>廊下側</span></div>
+              <div class="pods" id="pods" aria-label="6列の席、班ごとに表示"></div>
+            </div>
+          </div>
+          <p class="room-footnote">名簿を開いて生徒をえらび、うつりたい席をおすと交代できます。名前をドラッグしてもOK。</p>
+        </section>
+        <aside class="control-panels" aria-label="条件と生徒名簿">
+          <details class="mission-panel" id="missionPanel">
+            <summary class="fold-summary">
+              <span class="fold-title"><span class="fold-heading" id="missionTitle">今回の条件</span><span class="fold-count" id="ruleCount"></span><span class="fold-status" id="conditionSummary"></span></span>
+            </summary>
+            <div class="fold-content">
+              <p class="story" id="story"></p>
+              <ul class="rules" id="rules"></ul>
+              <div class="mission-actions"><button class="primary-button" id="checkButton" type="button">できたかチェック</button><button class="quiet-button" id="hintButton" type="button" title="まだできていない条件を確認">ヒント</button></div>
+              <p class="check-result" id="checkResult" aria-live="polite">席を入れかえて、ぜんぶの条件をクリアしよう。</p>
+            </div>
+          </details>
+          <details class="roster-panel" id="rosterPanel">
+            <summary class="fold-summary">
+              <span class="fold-title"><span class="fold-heading" id="rosterTitle">クラスの名簿</span><span class="fold-count" id="rosterCount"></span></span>
+            </summary>
+            <div class="fold-content">
+              <div class="roster-heading"><p>★はリーダー気質。生徒をえらんで席をクリックすると交代します。</p></div>
+              <div class="roster" id="roster"></div>
+              <div class="legend"><span><b class="legend-star">★</b> リーダー</span><span>😀 条件OK</span><span>😭 条件未達</span></div>
+            </div>
+          </details>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog"><div class="dialog-stamp confetti" aria-hidden="true">✓</div><h2 id="dialogTitle">ミッション成功！</h2><p id="dialogText"></p><button class="primary-button" id="dialogNext" type="button">つぎの難易度へ</button><button class="dialog-close" id="dialogClose" type="button">このまま教室を見る</button></div>
+  </div>
+  <script>
+    const levels = [
+      {
+        name: "イージー", story: "はじめての席替え。仲良しの子が安心できる班と、おしゃべりがはずみすぎない席を考えてみよう。",
+        teams: [["りく", "あおい", "はる", "みお"], ["ゆうた", "さくら", "けん", "ひな"], ["そうた", "えま", "たくみ", "ここ"]],
+        rules: [
+          { type: "same", people: ["はる", "みお"], icon: "☺", title: "安心できる友だち", text: "はるさんとみおさんは、同じ班だと安心してすごせるよ。" },
+          { type: "notAdjacent", people: ["りく", "みお"], icon: "♪", title: "おしゃべりコンビ", text: "りくさんとみおさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
+          { type: "different", people: ["けん", "そうた"], icon: "↔", title: "気持ちを切りかえて", text: "けんさんとそうたさんは、今は別の班で落ちついてすごしたいそうです。" }
+        ]
+      },
+      {
+        name: "ノーマル", story: "班の数がふえたよ。友だちとの安心感を大切にしながら、リーダー役もかたよらないようにしよう。",
+        teams: [["あかり", "ゆう", "けんた", "れん"], ["みな", "はると", "ゆい", "あお"], ["さな", "りく", "そう", "えま"], ["まお", "たくみ", "めい", "ひろ"]],
+        leaders: ["けんた", "ゆい", "そう", "めい"],
+        rules: [
+          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの4人が、1つの班に1人ずつ入るようにしよう。" },
+          { type: "same", people: ["さな", "りく"], icon: "☺", title: "安心できる友だち", text: "さなさんとりくさんは、同じ班だと安心してすごせるよ。" },
+          { type: "notAdjacent", people: ["あかり", "れん"], icon: "♪", title: "おしゃべりコンビ", text: "あかりさんとれんさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
+          { type: "different", people: ["あお", "ひろ"], icon: "↔", title: "ちがう班でチャレンジ", text: "あおさんとひろさんは、ちがう班で新しい友だちとすごしてみたいそうです。" }
+        ]
+      },
+      {
+        name: "ハード", story: "5つの班をバランスよく。みんなの関係だけでなく、困ったときに声をかけられる人の配置も考えよう。",
+        teams: [["あかり", "けん", "りく", "まな"], ["はる", "そうた", "ゆい", "こう"], ["みお", "たくみ", "えいと", "さな"], ["ゆう", "ひなた", "しゅん", "ここ"], ["れん", "あおい", "なお", "みな"]],
+        leaders: ["けん", "ゆい", "えいと", "しゅん", "なお"],
+        rules: [
+          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの5人が、1つの班に1人ずつ入るようにしよう。" },
+          { type: "same", people: ["りく", "まな"], icon: "☺", title: "安心できる友だち", text: "りくさんとまなさんは、同じ班だと安心してすごせるよ。" },
+          { type: "adjacent", people: ["はる", "そうた"], icon: "☀", title: "声をかけやすい席", text: "はるさんが少し不安なとき、仲良しのそうたさんがとなりにいると安心。" },
+          { type: "different", people: ["あかり", "ゆう"], icon: "↔", title: "気持ちを切りかえて", text: "あかりさんとゆうさんは、今は別の班で落ちついてすごしたいそうです。" }
+        ]
+      },
+      {
+        name: "エクストラ", story: "6つの班、それぞれにちがう個性があるよ。安心できる相手、集中しやすい距離、リーダーの分担を全部かなえよう。",
+        teams: [["みな", "あお", "だいち", "りく"], ["ゆい", "はる", "けん", "まお"], ["そら", "あかり", "れん", "えま"], ["なお", "ひな", "そうた", "めい"], ["たくみ", "もも", "りお", "ゆう"], ["かい", "さな", "ひろ", "るか"]],
+        leaders: ["だいち", "けん", "そら", "なお", "たくみ", "かい"],
+        rules: [
+          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの6人が、1つの班に1人ずつ入るようにしよう。" },
+          { type: "same", people: ["さな", "ひろ"], icon: "☺", title: "安心できる友だち", text: "さなさんとひろさんは、同じ班だと安心してすごせるよ。" },
+          { type: "different", people: ["まお", "ひろ"], icon: "↔", title: "ちがう班でチャレンジ", text: "まおさんとひろさんは、ちがう班で新しい友だちとすごしてみたいそうです。" },
+          { type: "notAdjacent", people: ["みな", "りく"], icon: "♪", title: "集中できる距離", text: "みなさんとりくさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" },
+          { type: "adjacent", people: ["もも", "ゆう"], icon: "☀", title: "声をかけやすい席", text: "ももさんが困ったとき、仲良しのゆうさんがとなりにいると安心。" }
+        ]
+      },
+      {
+        name: "インフェルノ", story: "最後のチャレンジは7つの班。ひとりひとりが安心して学べるよう、条件をひとつずつ整理して席を決めよう。",
+        teams: [["あおい", "はる", "りく", "みお"], ["けんた", "さくら", "なお", "れん"], ["ゆう", "ここ", "しゅん", "えま"], ["たくみ", "ひな", "そう", "まこと"], ["みな", "ひろ", "りお", "ゆい"], ["かい", "まお", "えいと", "さな"], ["だいち", "もも", "あきら", "るか"]],
+        leaders: ["はる", "けんた", "しゅん", "まこと", "ゆい", "えいと", "だいち"],
+        rules: [
+          { type: "leaderSpread", icon: "★", title: "リーダーを分けよう", text: "リーダーの7人が、1つの班に1人ずつ入るようにしよう。" },
+          { type: "same", people: ["りく", "みお"], icon: "☺", title: "安心できる友だち", text: "りくさんとみおさんは、同じ班だと安心してすごせるよ。" },
+          { type: "same", people: ["えいと", "さな"], icon: "☺", title: "安心できる友だち", text: "えいとさんとさなさんは、同じ班だと安心してすごせるよ。" },
+          { type: "adjacent", people: ["ひな", "まこと"], icon: "☀", title: "声をかけやすい席", text: "ひなさんが少し不安なとき、仲良しのまことさんがとなりにいると安心。" },
+          { type: "different", people: ["なお", "ひろ"], icon: "↔", title: "気持ちを切りかえて", text: "なおさんとひろさんは、今は別の班で落ちついてすごしたいそうです。" },
+          { type: "different", people: ["まお", "もも"], icon: "↔", title: "ちがう班でチャレンジ", text: "まおさんとももさんは、ちがう班で新しい友だちとすごしてみたいそうです。" },
+          { type: "notAdjacent", people: ["みな", "ゆい"], icon: "♪", title: "集中できる距離", text: "みなさんとゆいさんは仲良し。となり同士だと話しこんじゃうので、となりはさけよう。" }
+        ]
+      }
+    ];
+
+    const levelButtons = document.getElementById("levelButtons");
+    const podsElement = document.getElementById("pods");
+    const rosterElement = document.getElementById("roster");
+    const rulesElement = document.getElementById("rules");
+    const resultElement = document.getElementById("checkResult");
+    const overlay = document.getElementById("overlay");
+    const difficultyNav = document.getElementById("difficultyNav");
+    const playView = document.getElementById("playView");
+    const makerView = document.getElementById("makerView");
+    const completedLevels = new Set();
+    let levelIndex = 0;
+    let students = [];
+    let seats = [];
+    let selectedStudent = null;
+    let toastTimer;
+    let gameMode = "play";
+    let customLevel = null;
+    let makerDraft = null;
+
+    function currentLevel() { return customLevel || levels[levelIndex]; }
+    function shuffle(items) {
+      const shuffled = [...items];
+      for (let index = shuffled.length - 1; index > 0; index--) {
+        const other = Math.floor(Math.random() * (index + 1));
+        [shuffled[index], shuffled[other]] = [shuffled[other], shuffled[index]];
+      }
+      return shuffled;
+    }
+    function startLevel(index, customChallenge = null) {
+      levelIndex = index;
+      customLevel = customChallenge;
+      const level = currentLevel();
+      students = level.teams.flat().map((name, studentIndex) => ({ id: `student-${studentIndex}`, name, leader: (level.leaders || []).includes(name) }));
+      seats = shuffle(students.map(student => student.id));
+      selectedStudent = null;
+      resultElement.textContent = "席を入れかえて、ぜんぶの条件をクリアしよう。";
+      resultElement.className = "check-result";
+      render();
+    }
+    function render() {
+      renderMode();
+      renderLevelButtons();
+      renderRoom();
+      renderRoster();
+      renderMission();
+      if (gameMode === "maker") renderMaker();
+    }
+    function renderMode() {
+      const isMaker = gameMode === "maker";
+      difficultyNav.hidden = isMaker || customLevel !== null;
+      playView.hidden = isMaker;
+      makerView.hidden = !isMaker;
+      document.getElementById("playModeButton").setAttribute("aria-pressed", String(!isMaker));
+      document.getElementById("makerModeButton").setAttribute("aria-pressed", String(isMaker));
+      document.getElementById("resetButton").hidden = isMaker;
+      document.getElementById("helpButton").hidden = isMaker;
+    }
+    function renderLevelButtons() {
+      levelButtons.innerHTML = "";
+      levels.forEach((level, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `level-button${completedLevels.has(index) ? " completed" : ""}`;
+        button.textContent = level.name;
+        button.setAttribute("aria-current", String(index === levelIndex));
+        button.addEventListener("click", () => { gameMode = "play"; startLevel(index); });
+        levelButtons.append(button);
+      });
+    }
+    function createMakerDraft(templateIndex) {
+      const template = levels[templateIndex];
+      return {
+        name: `${template.name}のアレンジ`,
+        templateIndex,
+        groupCount: template.teams.length,
+        students: template.teams.flat().map(name => ({ name, leader: (template.leaders || []).includes(name) })),
+        rules: template.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
+      };
+    }
+    function makerRule(type, people = []) {
+      const definitions = {
+        same: { icon: "☺", title: "安心できる友だち" },
+        different: { icon: "↔", title: "別の班でチャレンジ" },
+        adjacent: { icon: "☀", title: "声をかけやすい席" },
+        notAdjacent: { icon: "♪", title: "集中できる距離" },
+        leaderSpread: { icon: "★", title: "リーダーを分けよう" }
+      };
+      const [first, second] = people;
+      const text = type === "same" ? `${first}さんと${second}さんは、同じ班にします。`
+        : type === "different" ? `${first}さんと${second}さんは、別の班にします。`
+        : type === "adjacent" ? `${first}さんと${second}さんは、同じ班のとなり同士にします。`
+        : type === "notAdjacent" ? `${first}さんと${second}さんは、となり同士にならないようにします。`
+        : "リーダーの生徒を各班に1人ずつ配置します。";
+      return { type, people: type === "leaderSpread" ? undefined : [...people], ...definitions[type], text };
+    }
+    function renderMaker() {
+      if (!makerDraft) return;
+      document.getElementById("makerName").value = makerDraft.name;
+      document.getElementById("makerTemplate").value = String(makerDraft.templateIndex);
+      document.getElementById("makerTeamCount").value = String(makerDraft.groupCount);
+      const roster = document.getElementById("makerRoster");
+      roster.innerHTML = "";
+      makerDraft.students.forEach((student, index) => {
+        const row = document.createElement("div");
+        row.className = "maker-student";
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.maxLength = 12;
+        nameInput.value = student.name;
+        nameInput.setAttribute("aria-label", `${index + 1}人目の名前`);
+        nameInput.addEventListener("change", () => {
+          const name = nameInput.value.trim();
+          if (!name || makerDraft.students.some((other, otherIndex) => otherIndex !== index && other.name === name)) {
+            showToast("名前は空欄にせず、ひとりずつ別の名前にしてください。");
+            renderMaker();
+            return;
+          }
+          const oldName = student.name;
+          student.name = name;
+          makerDraft.rules = makerDraft.rules.map(rule => rule.people && rule.people.includes(oldName)
+            ? makerRule(rule.type, rule.people.map(person => person === oldName ? name : person))
+            : rule);
+          renderMaker();
+        });
+        const leaderLabel = document.createElement("label");
+        leaderLabel.className = "leader-toggle";
+        const leaderCheck = document.createElement("input");
+        leaderCheck.type = "checkbox";
+        leaderCheck.checked = student.leader;
+        leaderCheck.setAttribute("aria-label", `${student.name}をリーダーにする`);
+        leaderCheck.addEventListener("change", () => { student.leader = leaderCheck.checked; });
+        leaderLabel.append(leaderCheck, document.createTextNode("★ リーダー"));
+        row.append(nameInput, leaderLabel);
+        roster.append(row);
+      });
+      renderMakerRules();
+      renderMakerPersonOptions();
+      updateNewRulePeopleVisibility();
+    }
+    function renderMakerRules() {
+      const list = document.getElementById("makerRules");
+      list.innerHTML = "";
+      makerDraft.rules.forEach((rule, index) => {
+        const row = document.createElement("div");
+        row.className = "maker-rule-row";
+        const typeSelect = document.createElement("select");
+        typeSelect.setAttribute("aria-label", `条件${index + 1}の種類`);
+        addRuleTypeOptions(typeSelect, rule.type);
+        typeSelect.addEventListener("change", () => {
+          const people = typeSelect.value === "leaderSpread" ? [] : (rule.people || [makerDraft.students[0].name, makerDraft.students[1].name]);
+          makerDraft.rules[index] = makerRule(typeSelect.value, people);
+          renderMakerRules();
+        });
+        row.append(typeSelect);
+        if (rule.type === "leaderSpread") {
+          const note = document.createElement("span");
+          note.className = "maker-note";
+          note.textContent = "各班に1人";
+          note.style.gridColumn = "span 2";
+          row.append(note);
+        } else {
+          rule.people.forEach((person, personIndex) => {
+            const select = document.createElement("select");
+            select.setAttribute("aria-label", `条件${index + 1}の生徒${personIndex + 1}`);
+            addStudentOptions(select, person);
+            select.addEventListener("change", () => {
+              const newPeople = [...rule.people];
+              newPeople[personIndex] = select.value;
+              if (newPeople[0] === newPeople[1]) {
+                showToast("条件にはちがう生徒を2人えらんでください。");
+                renderMakerRules();
+                return;
+              }
+              makerDraft.rules[index] = makerRule(rule.type, newPeople);
+              renderMakerRules();
+            });
+            row.append(select);
+          });
+        }
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "remove-rule";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", `条件${index + 1}を削除`);
+        remove.addEventListener("click", () => { makerDraft.rules.splice(index, 1); renderMaker(); });
+        row.append(remove);
+        list.append(row);
+      });
+    }
+    function addRuleTypeOptions(select, selected) {
+      const options = [["same", "同じ班にする"], ["different", "別の班にする"], ["adjacent", "となり同士にする"], ["notAdjacent", "となりをさける"], ["leaderSpread", "リーダーを各班に分ける"]];
+      options.forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        option.selected = value === selected;
+        select.append(option);
+      });
+    }
+    function addStudentOptions(select, selected) {
+      makerDraft.students.forEach(student => {
+        const option = document.createElement("option");
+        option.value = student.name;
+        option.textContent = student.name;
+        option.selected = student.name === selected;
+        select.append(option);
+      });
+    }
+    function renderMakerPersonOptions() {
+      ["makerPersonA", "makerPersonB"].forEach((id, index) => {
+        const select = document.getElementById(id);
+        const previous = select.value;
+        select.innerHTML = "";
+        const preferred = makerDraft.students[index]?.name;
+        addStudentOptions(select, makerDraft.students.some(student => student.name === previous) ? previous : preferred);
+      });
+    }
+    function updateNewRulePeopleVisibility() {
+      const isLeaderRule = document.getElementById("makerNewRuleType").value === "leaderSpread";
+      document.getElementById("makerPersonA").hidden = isLeaderRule;
+      document.getElementById("makerPersonB").hidden = isLeaderRule;
+    }
+    function resizeMakerDraft(groupCount) {
+      const students = [...makerDraft.students];
+      const usedNames = new Set(students.map(student => student.name));
+      const namePool = levels.flatMap(level => level.teams.flat()).filter(name => !usedNames.has(name));
+      while (students.length < groupCount * 4) {
+        const name = namePool.shift() || `なまえ${students.length + 1}`;
+        if (!usedNames.has(name)) {
+          students.push({ name, leader: false });
+          usedNames.add(name);
+        }
+      }
+      const nextStudents = students.slice(0, groupCount * 4);
+      const available = new Set(nextStudents.map(student => student.name));
+      const previousRuleCount = makerDraft.rules.length;
+      makerDraft.students = nextStudents;
+      makerDraft.groupCount = groupCount;
+      makerDraft.rules = makerDraft.rules.filter(rule => !rule.people || rule.people.every(name => available.has(name)));
+      if (makerDraft.rules.length < previousRuleCount) showToast("生徒をへらしたため、その生徒を使っていた条件を取りのぞきました。");
+      renderMaker();
+    }
+    function enterMaker() {
+      if (!makerDraft) makerDraft = createMakerDraft(levelIndex);
+      customLevel = null;
+      gameMode = "maker";
+      render();
+    }
+    function enterPlay() {
+      gameMode = "play";
+      customLevel = null;
+      startLevel(levelIndex);
+    }
+    function playMakerDraft() {
+      const names = makerDraft.students.map(student => student.name.trim());
+      if (!makerDraft.name.trim() || names.some(name => !name) || new Set(names).size !== names.length) {
+        showToast("チャレンジ名と、重ならない生徒の名前を入力してください。");
+        return;
+      }
+      if (!makerDraft.rules.length) {
+        showToast("条件を1つ以上追加してください。");
+        return;
+      }
+      if (makerDraft.rules.some(rule => rule.type === "leaderSpread") && makerDraft.students.filter(student => student.leader).length !== makerDraft.groupCount) {
+        showToast("リーダー分散の条件には、班と同じ人数のリーダーが必要です。");
+        return;
+      }
+      const teams = Array.from({ length: makerDraft.groupCount }, (_, groupIndex) => names.slice(groupIndex * 4, groupIndex * 4 + 4));
+      customLevel = {
+        name: makerDraft.name.trim(),
+        story: "オリジナルの条件にチャレンジ！みんなが安心できる席を考えよう。",
+        teams,
+        leaders: makerDraft.students.filter(student => student.leader).map(student => student.name),
+        rules: makerDraft.rules.map(rule => ({ ...rule, people: rule.people ? [...rule.people] : undefined }))
+      };
+      gameMode = "play";
+      startLevel(levelIndex, customLevel);
+    }
+    function studentById(id) { return students.find(student => student.id === id); }
+    function studentMood(student) {
+      const relevantRules = currentLevel().rules.filter(rule => rule.type === "leaderSpread"
+        ? student.leader
+        : rule.people.includes(student.name));
+      const isHappy = relevantRules.every(rule => {
+        if (rule.type !== "leaderSpread") return evaluateRule(rule).ok;
+        const groupIndex = groupAt(findSeat(student.id));
+        return seats.slice(groupIndex * 4, groupIndex * 4 + 4)
+          .filter(id => studentById(id).leader).length === 1;
+      });
+      return isHappy
+        ? { face: "😀", label: "関係する条件はクリア" }
+        : { face: "😭", label: "関係する条件に未達あり" };
+    }
+    function renderRoom() {
+      const level = currentLevel();
+      document.getElementById("roomTitle").textContent = customLevel ? level.name : "教室の席";
+      document.getElementById("roomMeta").textContent = `${students.length}人 · ${level.teams.length}班`;
+      podsElement.innerHTML = "";
+      level.teams.forEach((_, groupIndex) => {
+        const pod = document.createElement("section");
+        pod.className = "pod";
+        const title = document.createElement("h3");
+        title.className = "pod-title";
+        title.innerHTML = `<span>${groupIndex + 1}班</span><span>4人</span>`;
+        const seatsGrid = document.createElement("div");
+        seatsGrid.className = "pod-seats";
+        for (let chair = 0; chair < 4; chair++) {
+          const seatIndex = groupIndex * 4 + chair;
+          const student = studentById(seats[seatIndex]);
+          const mood = studentMood(student);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `seat${student.leader ? " leader" : ""}${selectedStudent === student.id ? " selected" : ""}`;
+          button.setAttribute("aria-label", `${groupIndex + 1}班、${chairName(chair)}、${student.name}、${mood.label}${student.leader ? "、リーダー" : ""}`);
+          button.innerHTML = `<span class="seat-person"><span class="seat-face" aria-hidden="true">${mood.face}</span><span class="seat-name">${student.name}</span></span><span class="seat-caption">${chairName(chair)}</span>`;
+          button.addEventListener("click", () => handleSeatClick(seatIndex));
+          button.addEventListener("dragover", event => { event.preventDefault(); button.classList.add("drop-target"); });
+          button.addEventListener("dragleave", () => button.classList.remove("drop-target"));
+          button.addEventListener("drop", event => {
+            event.preventDefault();
+            button.classList.remove("drop-target");
+            const draggedId = event.dataTransfer.getData("text/plain");
+            if (draggedId) swapStudent(draggedId, seatIndex);
+          });
+          seatsGrid.append(button);
+        }
+        pod.append(title, seatsGrid);
+        podsElement.append(pod);
+      });
+    }
+    function chairName(index) { return ["まえ・左", "まえ・右", "うしろ・左", "うしろ・右"][index]; }
+    function renderRoster() {
+      rosterElement.innerHTML = "";
+      students.forEach(student => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `student${selectedStudent === student.id ? " selected" : ""}`;
+        button.draggable = true;
+        button.setAttribute("aria-pressed", String(selectedStudent === student.id));
+        const mood = studentMood(student);
+        button.setAttribute("aria-label", `${student.name}、${mood.label}${student.leader ? "、リーダー" : ""}`);
+        button.title = mood.label;
+        button.innerHTML = `<span class="seat-person"><span class="student-face" aria-hidden="true">${mood.face}</span><span class="student-name">${student.name}</span></span>${student.leader ? '<span class="leader-mark" aria-label="リーダー">★</span>' : ""}`;
+        button.addEventListener("click", () => { selectedStudent = selectedStudent === student.id ? null : student.id; render(); });
+        button.addEventListener("dragstart", event => event.dataTransfer.setData("text/plain", student.id));
+        rosterElement.append(button);
+      });
+    }
+    function renderMission() {
+      const level = currentLevel();
+      const checks = level.rules.map(evaluateRule);
+      const remaining = checks.filter(check => !check.ok).length;
+      document.getElementById("story").textContent = level.story;
+      document.getElementById("ruleCount").textContent = `${level.rules.length}つの条件`;
+      document.getElementById("rosterCount").textContent = `${students.length}人`;
+      const summary = document.getElementById("conditionSummary");
+      summary.textContent = remaining ? `${remaining}件未達` : "ぜんぶOK";
+      summary.classList.toggle("all-clear", remaining === 0);
+      rulesElement.innerHTML = "";
+      level.rules.forEach((rule, index) => {
+        const item = document.createElement("li");
+        item.className = "rule";
+        const check = checks[index];
+        item.innerHTML = `<span class="rule-icon" aria-hidden="true">${rule.icon}</span><span><strong>${rule.title}</strong>${rule.text}<span class="rule-status${check.ok ? " ok" : ""}" id="ruleStatus${index}"><i class="status-dot"></i>${check.ok ? "クリア" : "まだ"}</span></span>`;
+        rulesElement.append(item);
+      });
+    }
+    function groupAt(seatIndex) { return Math.floor(seatIndex / 4); }
+    function findSeat(studentId) { return seats.indexOf(studentId); }
+    function classroomCoordinates(seatIndex) {
+      const groupIndex = groupAt(seatIndex);
+      const chair = seatIndex % 4;
+      return {
+        row: Math.floor(groupIndex / 3) * 2 + Math.floor(chair / 2),
+        column: (groupIndex % 3) * 2 + chair % 2
+      };
+    }
+    function areAdjacent(firstSeat, secondSeat) {
+      const first = classroomCoordinates(firstSeat);
+      const second = classroomCoordinates(secondSeat);
+      const rowDistance = Math.abs(first.row - second.row);
+      const columnDistance = Math.abs(first.column - second.column);
+      return rowDistance + columnDistance === 1;
+    }
+    function evaluateRule(rule) {
+      if (rule.type === "leaderSpread") {
+        const onePerGroup = currentLevel().teams.every((_, groupIndex) => seats.slice(groupIndex * 4, groupIndex * 4 + 4).filter(id => studentById(id).leader).length === 1);
+        return { ok: onePerGroup, hint: "各班の★が1人ずつになるように席を入れかえてみよう。" };
+      }
+      const [firstId, secondId] = rule.people.map(name => students.find(student => student.name === name).id);
+      const firstSeat = findSeat(firstId);
+      const secondSeat = findSeat(secondId);
+      const sameGroup = groupAt(firstSeat) === groupAt(secondSeat);
+      const adjacent = areAdjacent(firstSeat, secondSeat);
+      const ok = rule.type === "same" ? sameGroup : rule.type === "different" ? !sameGroup : rule.type === "adjacent" ? adjacent : rule.type === "notAdjacent" ? !adjacent : false;
+      const hints = {
+        same: `${rule.people.join("さんと")}さんを同じ班にしよう。`,
+        different: `${rule.people.join("さんと")}さんが別の班になる席を考えよう。`,
+        adjacent: `${rule.people.join("さんと")}さんを同じ班のとなり同士にしよう。`,
+        notAdjacent: `${rule.people.join("さんと")}さんがとなり同士にならないようにしよう。`
+      };
+      return { ok, hint: hints[rule.type] };
+    }
+    function handleSeatClick(seatIndex) {
+      const occupant = seats[seatIndex];
+      if (!selectedStudent) { selectedStudent = occupant; render(); return; }
+      swapStudent(selectedStudent, seatIndex);
+    }
+    function swapStudent(studentId, destinationSeat) {
+      const sourceSeat = findSeat(studentId);
+      if (sourceSeat < 0 || sourceSeat === destinationSeat) { selectedStudent = null; render(); return; }
+      [seats[sourceSeat], seats[destinationSeat]] = [seats[destinationSeat], seats[sourceSeat]];
+      selectedStudent = null;
+      render();
+    }
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+    function checkArrangement(showSuccess = true) {
+      const results = currentLevel().rules.map(evaluateRule);
+      results.forEach((result, index) => {
+        const status = document.getElementById(`ruleStatus${index}`);
+        status.classList.toggle("ok", result.ok);
+        status.lastChild.textContent = result.ok ? "クリア" : "まだ";
+      });
+      const remaining = results.filter(result => !result.ok);
+      if (remaining.length) {
+        resultElement.textContent = `${remaining.length}つの条件がまだだよ。ヒントを見ながら考えてみよう。`;
+        resultElement.className = "check-result";
+        if (showSuccess) showToast(`${remaining.length}つの条件をもう少し！`);
+        return false;
+      }
+      if (!customLevel) completedLevels.add(levelIndex);
+      renderLevelButtons();
+      resultElement.textContent = "ぜんぶの条件クリア！みんなが過ごしやすい席になったね。";
+      resultElement.className = "check-result success";
+      if (showSuccess) openSuccessDialog();
+      return true;
+    }
+    function openSuccessDialog() {
+      const isCustom = customLevel !== null;
+      const isLast = levelIndex === levels.length - 1;
+      document.getElementById("dialogTitle").textContent = isCustom ? "チャレンジ成功！" : "ミッション成功！";
+      document.getElementById("dialogText").textContent = isCustom
+        ? `「${currentLevel().name}」をクリア！つくった条件をぜんぶ達成したよ。`
+        : isLast ? "インフェルノまでクリア！みんなの気持ちを考えた席替え、大成功！" : `${currentLevel().name}をクリア！それぞれが安心してすごせる教室になったよ。`;
+      document.getElementById("dialogNext").textContent = isCustom ? "メーカーへもどる" : isLast ? "もう一度あそぶ" : "つぎの難易度へ";
+      document.getElementById("dialogNext").onclick = () => {
+        overlay.classList.remove("open");
+        if (isCustom) {
+          gameMode = "maker";
+          startLevel(levelIndex);
+          return;
+        }
+        gameMode = "play";
+        startLevel(isLast ? 0 : levelIndex + 1);
+      };
+      overlay.classList.add("open");
+      document.getElementById("dialogNext").focus();
+    }
+    document.getElementById("checkButton").addEventListener("click", () => checkArrangement());
+    document.getElementById("hintButton").addEventListener("click", () => {
+      const firstUnmet = currentLevel().rules.map(rule => evaluateRule(rule)).find(result => !result.ok);
+      if (!firstUnmet) { showToast("ぜんぶクリア！チェックボタンをおしてね。"); return; }
+      showToast(firstUnmet.hint);
+    });
+    document.getElementById("playModeButton").addEventListener("click", enterPlay);
+    document.getElementById("makerModeButton").addEventListener("click", enterMaker);
+    document.getElementById("makerName").addEventListener("input", event => { if (makerDraft) makerDraft.name = event.target.value; });
+    document.getElementById("makerTemplate").addEventListener("change", event => {
+      const previousName = makerDraft.name;
+      const wasDefaultName = previousName === `${levels[makerDraft.templateIndex].name}のアレンジ`;
+      makerDraft = createMakerDraft(Number(event.target.value));
+      if (!wasDefaultName) makerDraft.name = previousName;
+      render();
+    });
+    document.getElementById("makerTeamCount").addEventListener("change", event => resizeMakerDraft(Number(event.target.value)));
+    document.getElementById("makerNewRuleType").addEventListener("change", updateNewRulePeopleVisibility);
+    document.getElementById("addRuleButton").addEventListener("click", () => {
+      const type = document.getElementById("makerNewRuleType").value;
+      const people = type === "leaderSpread" ? [] : [document.getElementById("makerPersonA").value, document.getElementById("makerPersonB").value];
+      if (type !== "leaderSpread" && (!people[0] || !people[1] || people[0] === people[1])) {
+        showToast("条件にはちがう生徒を2人えらんでください。");
+        return;
+      }
+      makerDraft.rules.push(makerRule(type, people));
+      renderMaker();
+    });
+    document.getElementById("playCustomButton").addEventListener("click", playMakerDraft);
+    document.getElementById("resetButton").addEventListener("click", () => startLevel(levelIndex, customLevel));
+    document.getElementById("helpButton").addEventListener("click", () => showToast("人をえらんで席をおすと交代。条件をぜんぶクリアしたら「できたかチェック」！"));
+    document.getElementById("dialogClose").addEventListener("click", () => overlay.classList.remove("open"));
+    overlay.addEventListener("click", event => { if (event.target === overlay) overlay.classList.remove("open"); });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") { selectedStudent = null; overlay.classList.remove("open"); render(); }
+      if (event.key === "Enter" && !overlay.classList.contains("open") && event.target.tagName !== "BUTTON") checkArrangement();
+    });
+    startLevel(0);
+  </script>
+</body>
+</html>
